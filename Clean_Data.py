@@ -6,7 +6,7 @@ import os
 def clean_DataChuncks(df):
     
     # coulumns to be dropped
-    columns_to_drop=['fos','indexed_abstract','v12_id','v12_authors','doi','issue','issn','isbn','page_start','page_end','volume','doc_type','lang','venue','references']
+    columns_to_drop=['fos','indexed_abstract','v12_id','v12_authors','doi','issue','issn','isbn','page_start','page_end','volume','doc_type','venue','references']
     df.drop(columns=columns_to_drop,inplace=True,errors='ignore')
     
     # Dropping the records that don't have any url or the records that don't have both the keywords and abstract of lang!=en
@@ -16,7 +16,7 @@ def clean_DataChuncks(df):
     
     count_records=len(df)
     df = df.to_dict('records')
-    append_to_json('Another_clean_dataset.json',df)
+    append_to_json('our_clean_dataset.json',df)
     return count_records
 # storing the clean dara
 def append_to_json(file_path, new_record):
