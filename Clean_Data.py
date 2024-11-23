@@ -9,9 +9,9 @@ def clean_DataChuncks(df):
     columns_to_drop=['fos','indexed_abstract','v12_id','v12_authors','doi','issue','issn','isbn','page_start','page_end','volume','doc_type','lang','venue','references']
     df.drop(columns=columns_to_drop,inplace=True,errors='ignore')
     
-    # Dropping the records that don't have any url or the records that don't have both the keywords and abstract
+    # Dropping the records that don't have any url or the records that don't have both the keywords and abstract of lang!=en
     for index,current in  df.iterrows():
-        if(current['url']==[] or (current['keywords']==[] and current['abstract']=='')):
+        if(current['url']==[] or (current['keywords']==[] and current['abstract']=='') or current['lang']!='en'):
             df.drop(index,axis=0,inplace=True)
     
     count_records=len(df)
