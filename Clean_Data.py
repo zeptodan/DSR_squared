@@ -58,3 +58,40 @@ with open(file_path, "r") as file:
         df = pd.DataFrame(chunk)   
         count=count+ clean_DataChuncks(df)
 print(count)
+
+# After droping columns
+#  0   id          1000 non-null   object
+#  1   title       1000 non-null   object
+#  2   keywords    1000 non-null   object
+#  3   lang              1000 non-null   object
+#  4   year        1000 non-null   int64
+#  5   n_citation  1000 non-null   int64
+#  6   url         1000 non-null   object
+#  7   abstract    1000 non-null   object
+#  8   authors     1000 non-null   object
+
+# Original data
+
+#  0   id          1000 non-null   object
+#  1   title             1000 non-null   object
+#  2   doi               1000 non-null   object     drop
+#  3   issue             1000 non-null   object     drop
+#  4   keywords          1000 non-null   object     keywords==[]
+#  5   lang              1000 non-null   object     Drop other than en
+#  6   venue             1000 non-null   object     Drop (where the article is published)
+#  7   year              1000 non-null   int64      
+#  8   n_citation        1000 non-null   int64      
+#  9   page_start        1000 non-null   object     drop
+#  10  page_end          1000 non-null   object     drop
+#  11  volume            1000 non-null   object     drop
+#  12  issn              1000 non-null   object     drop
+#  13  isbn              1000 non-null   object     drop
+#  14  url               1000 non-null   object     url==[]
+#  15  abstract          1000 non-null   object     abstract==''
+#  16  authors           1000 non-null   object     
+#  17  doc_type          1000 non-null   object     drop
+#  18  references        645 non-null    object     drop
+#  19  fos               745 non-null    object     drop
+#  20  indexed_abstract  745 non-null    object     drop
+#  21  v12_id            745 non-null    float64    drop
+#  22  v12_authors       745 non-null    object     drop
