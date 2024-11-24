@@ -60,38 +60,38 @@ with open(file_path, "r") as file:
 print(count)
 
 # After droping columns
-#  0   id          1000 non-null   object
-#  1   title       1000 non-null   object
-#  2   keywords    1000 non-null   object
-#  3   lang              1000 non-null   object
-#  4   year        1000 non-null   int64
-#  5   n_citation  1000 non-null   int64
-#  6   url         1000 non-null   object
-#  7   abstract    1000 non-null   object
-#  8   authors     1000 non-null   object
+#  0   id             object
+#  1   title          object
+#  2   keywords    l  object
+#  3   lang           object
+#  4   year           int64
+#  5   n_citation     int64
+#  6   url            object
+#  7   abstract       object
+#  8   authors        object
 
 # Original data
 
-#  0   id          1000 non-null   object
-#  1   title             1000 non-null   object
-#  2   doi               1000 non-null   object     drop
-#  3   issue             1000 non-null   object     drop
-#  4   keywords          1000 non-null   object     keywords==[]
-#  5   lang              1000 non-null   object     Drop other than en
-#  6   venue             1000 non-null   object     Drop (where the article is published)
-#  7   year              1000 non-null   int64      
-#  8   n_citation        1000 non-null   int64      
-#  9   page_start        1000 non-null   object     drop
-#  10  page_end          1000 non-null   object     drop
-#  11  volume            1000 non-null   object     drop
-#  12  issn              1000 non-null   object     drop
-#  13  isbn              1000 non-null   object     drop
-#  14  url               1000 non-null   object     url==[]
-#  15  abstract          1000 non-null   object     abstract==''
-#  16  authors           1000 non-null   object     
-#  17  doc_type          1000 non-null   object     drop
-#  18  references        645 non-null    object     drop
-#  19  fos               745 non-null    object     drop
-#  20  indexed_abstract  745 non-null    object     drop
-#  21  v12_id            745 non-null    float64    drop
-#  22  v12_authors       745 non-null    object     drop
+#  0   id                   object
+#  1   title                object
+#  2   doi                  object     drop
+#  3   issue                object     drop
+#  4   keywords             object     keywords==[]
+#  5   lang                 object     Drop other than en
+#  6   venue                object     Drop (where the article is published)
+#  7   year                 int64      
+#  8   n_citation            int64      
+#  9   page_start            object     drop
+#  10  page_end              object     drop
+#  11  volume                object     drop
+#  12  issn                  object     drop
+#  13  isbn                  object     drop
+#  14  url                   object     url==[]
+#  15  abstract              object     abstract==''
+#  16  authors               object     
+#  17  doc_type              object     drop
+#  18  references            object     drop
+#  19  fos                   object     drop
+#  20  indexed_abstract      object     drop
+#  21  v12_id                float64    drop
+#  22  v12_authors           object     drop
