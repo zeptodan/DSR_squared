@@ -1,14 +1,19 @@
 import pandas as pd
 import spacy
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_lg")
+set = {}
 
-def tokelemma(text):
-    data = text.lower()
+def process_to_set(paragraph):
+    data = paragraph.lower()
     tokkens = [token.lemma_ for token in data
                if not token.is_stop and token.is_alpha]
-    return tokkens
+    for tokken in tokkens:
+        set.add(tokken)
 
-def vectorize (tokens)
-    for token in tokens:
+def vector(tokken):
 
+    embedding = nlp(tokken)
+    return embedding.vector
+
+        
