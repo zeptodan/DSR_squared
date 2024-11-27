@@ -1,8 +1,9 @@
 import pandas as pd
 import spacy
 
-##Path to json
+##Paths
 json = 'json.json'
+csv = 'csv.csv'
 
 ####################################################
 nlp = spacy.load("en_core_web_lg")
