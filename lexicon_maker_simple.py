@@ -1,15 +1,16 @@
-import pandas as pd
+import modin.pandas as pd
 import json
 import spacy
 
-# Paths
+# Variables
 json_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\1000_clean.json'
 csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\LexiconSimple.csv'
+batch_size = 100
 
+#================================================================================
 # Global Variables
 nlp = spacy.load("en_core_web_md")
 lexicon_set = set()
-batch_size = 100  # Process tokens in batches
 
 def json_lexicon(json_path):
     counter = 1
