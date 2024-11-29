@@ -7,11 +7,10 @@ json_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\D
 csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\LexiconSimple.csv'
 chunk_size = 100
 word_counter_size = 7
-nlp = spacy.load("en_core_web_md")
+nlp = spacy.load("en_core_web_sm")
 
 #================================================================================
 #Main
-global lexicon 
 lexicon = {}
 def json_lexicon(json_path):
     doc_counter = 1
