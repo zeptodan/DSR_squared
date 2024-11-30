@@ -22,7 +22,6 @@ nlp = spacy.load("en_core_web_md")
 #Main
 lexicon = {}
 def json_lexicon(json_path):
-    lexicon
     doc_counter = 1
     global word_counter
     word_counter = 1
