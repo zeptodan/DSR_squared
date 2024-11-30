@@ -4,7 +4,7 @@ import spacy
 
 # Variables
 json_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\1000_clean.json'
-csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\LexiconSimple2.csv'
+csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\LexiconSimple3.csv'
 chunk_size = 100
 word_counter_size = 7
 nlp = spacy.load("en_core_web_sm")
@@ -46,11 +46,11 @@ def process_doc(obj):
 
     #extract title, keywords, abstract
     if 'title' in obj and obj['title']:
-        master_string +=(' '+ obj['title'])
+        master_string +=(' '+ obj['title'].strip())
     if 'abstract' in obj and obj['abstract']:
-        master_string+=(' '+  obj['abstract'])
+        master_string+=(' '+  obj['abstract'].strip())
     if 'keywords' in obj and obj['keywords']:
-        master_string +=(' '+  list_to_string(obj['keywords']))
+        master_string +=(' '+  list_to_string(obj['keywords']).strip())
 
     
     if not master_string: 
