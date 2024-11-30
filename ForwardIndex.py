@@ -1,16 +1,20 @@
 import pandas as pd
+import csv 
 import json
 import spacy
 
 # Variables
 dataset_path = '1000_clean.json'
-lexicon_path = 'LexiconSimple.csv'
+lexicon_path = 'Lexicon.csv'
 output_path = 'InvertedIndex.json'
 nlp = spacy.load("en_core_web_sm")
 
 ################################## MAIN ########################################
 ForwardIndex = {}
-lexicon = pd.read_csv(lexicon_path)
+#load the lexicon as a dictionary
+with open(lexicon_path, mode='r', newline='') as file:
+    reader = csv.reader(file)
+    lexicon = {row[1]: [row[0], row[2]] for row in reader}
 
 def process_dataset(dataset_path):
     doc_counter = 1
@@ -34,4 +38,4 @@ def process_doc (doc):
 def process_title(dict, title):
     title_words = [token.lemma_ for token in title
                     if not token.is_stop and token.is_alpha
-                    and token in nlp.vocab]
+                    and token in lexicon]
