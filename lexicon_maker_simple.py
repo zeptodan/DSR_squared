@@ -4,7 +4,7 @@ import spacy
 
 # Variables
 json_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\1000_clean.json'
-csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\LexiconSimple.csv'
+csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\LexiconSimple2.csv'
 chunk_size = 100
 word_counter_size = 7
 nlp = spacy.load("en_core_web_sm")
@@ -13,6 +13,7 @@ nlp = spacy.load("en_core_web_sm")
 #Main
 lexicon = {}
 def json_lexicon(json_path):
+    lexicon
     doc_counter = 1
     global word_counter
     word_counter = 1
@@ -24,13 +25,7 @@ def json_lexicon(json_path):
 
         for obj in data:
             print(f"Processing {doc_counter}")
-            # Check and process each field
-            if 'title' in obj and obj['title']:
-                add_to_lexicon(obj['title'])
-            if 'abstract' in obj and obj['abstract']:
-                add_to_lexicon(obj['abstract'])
-            if 'keywords' in obj and obj['keywords']:
-                add_to_lexicon(list_to_string(obj['keywords']))
+            process_doc(obj)
             doc_counter += 1
 
     except Exception as e:
@@ -44,16 +39,29 @@ def json_lexicon(json_path):
 #Functions
 
 
-# Process a string for the lexicon
-def add_to_lexicon(string):
+# Process a doc for the lexicon
+def process_doc(obj):
     global lexicon
-    if not string or len(string.strip()) < 2:  # Avoid very short strings
+    master_string = ''
+
+    #extract title, keywords, abstract
+    if 'title' in obj and obj['title']:
+        master_string +=(' '+ obj['title'])
+    if 'abstract' in obj and obj['abstract']:
+        master_string+=(' '+  obj['abstract'])
+    if 'keywords' in obj and obj['keywords']:
+        master_string +=(' '+  list_to_string(obj['keywords']))
+
+    
+    if not master_string: 
         return
-    data = nlp(string.lower())
-    tokens = [token.lemma_ for token in data
+    master_string = nlp(master_string.lower())
+    unique_words = {token.lemma_ for token in master_string
              if not token.is_stop and token.is_alpha 
-             and all(ord(char) < 128 for char in token.text)]
-    for token in tokens:
+             and all(ord(char) < 128 for char in token.text)
+             and not len(token)<=2}
+    unique_words = list(unique_words)
+    for token in unique_words:
         if token not in lexicon:
             lexicon[token] = [str_wordID(), 1]  # Store ID and count
         else:
