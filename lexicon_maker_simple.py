@@ -1,12 +1,16 @@
+'''
+Takes the dataset and generates a lexicon for each word
+wordID, word, doc-count
+'''
 import pandas as pd
 import json
 import spacy
 
 # Variables
+# modify these according to your system and preferences
 json_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\1000_clean.json'
 csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\Lexicon.csv'
-chunk_size = 100
-word_counter_size = 7
+word_counter_size = 7 #number of digits for the wordID
 nlp = spacy.load("en_core_web_md")
 
 #================================================================================
@@ -56,6 +60,7 @@ def process_doc(obj):
     if not master_string: 
         return
     master_string = nlp(master_string.lower())
+    #lemmatize and filter words
     unique_words = {token.lemma_ for token in master_string
              if not token.is_stop and token.is_alpha 
              and all(ord(char) < 128 for char in token.text)
@@ -68,7 +73,7 @@ def process_doc(obj):
         else:
             lexicon[token][1] += 1  # Increment count
 
-
+#write the final lexicon to a .csv file
 def write_to_csv():
     global lexicon
     if lexicon:  # Proceed only if there are tokens
@@ -83,7 +88,8 @@ def list_to_string(lst):
     if not lst:
         return ''
     return ' '.join(str(s) for s in lst)
-
+    
+#Generate a wordID for a new word
 def str_wordID():
     global word_counter
     global word_counter_size
