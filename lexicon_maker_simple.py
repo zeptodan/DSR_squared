@@ -4,7 +4,7 @@ import spacy
 
 # Variables
 json_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\1000_clean.json'
-csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\Lexicon2.csv'
+csv_path = 'D:\\Danish\\Study\\NUST\\Data Structures and Algorithms\\Project\\DSR_squared\\Lexicon.csv'
 chunk_size = 100
 word_counter_size = 7
 nlp = spacy.load("en_core_web_md")
@@ -61,7 +61,7 @@ def process_doc(obj):
              and all(ord(char) < 128 for char in token.text)
              and not len(token)<=2}
     unique_words = list(unique_words)
-    unique_words = [word for word in unique_words if nlp.vocab]
+    unique_words = [word for word in unique_words if word in nlp.vocab]
     for token in unique_words:
         if token not in lexicon:
             lexicon[token] = [str_wordID(), 1]  # Store ID and count
@@ -74,7 +74,7 @@ def write_to_csv():
     if lexicon:  # Proceed only if there are tokens
         df = pd.DataFrame(lexicon.values(), columns=['wordID', 'count'], index=lexicon.keys()).reset_index()
         df.columns = ['word', 'count', 'wordID']  # Rename columns appropriately
-        df = df['wordID', 'word', 'count'] # Reorder columns to ID, word, count
+        df = df[['wordID', 'word', 'count']] # Reorder columns to ID, word, count
         df.to_csv(csv_path, header=False, index=False)
 
 
