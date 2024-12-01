@@ -1,3 +1,6 @@
 1000_clean_dataset.json
 Lexicon.csv
 Forward_index.json
+TheCleanData.json
+Inverted_index.json
+lexi.csv

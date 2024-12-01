@@ -3,7 +3,6 @@ Takes the dataset and generates a lexicon for each word
 wordID, word, doc-count
 '''
 import pandas as pd
-import json
 import spacy
 import ijson
 import os
@@ -13,18 +12,20 @@ import os
 
 # Variables
 # modify these according to your system and preferences
-json_path = r'D:\DSR^2\TheCleanData.json'
-csv_path = r'D:\DSR^2\lexi.csv'
+json_path = r'1000_clean_dataset.json'
+csv_path = r'Lexicon.csv'
 word_counter_size = 7 #number of digits for the wordID
+global word_counter 
+word_counter = 1
 nlp = spacy.load("en_core_web_md")
 
 #================================================================================
 #Main
 lexicon = {}
 def json_lexicon(json_path):
+
     doc_counter = 1
-    global word_counter
-    word_counter = 1
+    
 
 
     # Load JSON file 
@@ -32,7 +33,7 @@ def json_lexicon(json_path):
     with open(json_path, 'r') as file:
             objects = ijson.items(file, "item")
             # data = json.load(file)
-            while(True):
+            for i in range(1):
                 chunk = [obj for _, obj in zip(range(1000), objects)]  
                 if not chunk:
                     break   
@@ -41,9 +42,11 @@ def json_lexicon(json_path):
                     print(f"Processing {doc_counter}")
                     process_doc(obj)
                     doc_counter += 1 
-                print("Writing to csv")
-                write_to_csv()
                 
+
+    print("Writing to csv")
+    write_to_csv()           
+         
 
     #Write the entire lexicon to csv
    
@@ -54,15 +57,14 @@ def json_lexicon(json_path):
 
 # Process a doc for the lexicon
 def process_doc(obj):
+    global word_counter 
+
     master_string = ''
 
     #extract title, keywords, abstract
-    if 'title' in obj and obj['title']:
-        master_string +=(' '+ obj['title'].strip())
-    if 'abstract' in obj and obj['abstract']:
-        master_string+=(' '+  obj['abstract'].strip())
-    if 'keywords' in obj and obj['keywords']:
-        master_string +=(' '+  list_to_string(obj['keywords']).strip())
+    master_string +=(' '+ obj['title'].strip())
+    master_string+=(' '+  obj['abstract'].strip())
+    master_string +=(' '+  list_to_string(obj['keywords']).strip())
 
     
     if not master_string: 
@@ -70,14 +72,12 @@ def process_doc(obj):
     master_string = nlp(master_string.lower())
     #lemmatize and filter words
     unique_words = {token.lemma_ for token in master_string
-             if not token.is_stop and token.is_alpha 
-             and all(ord(char) < 128 for char in token.text)
-             and not len(token)<=2}
-    unique_words = list(unique_words)
-    unique_words = [word for word in unique_words if word in nlp.vocab]
+                if token.is_alpha and not token.is_stop
+                and len(token) > 2 and token.text in nlp.vocab}
     for token in unique_words:
         if token not in lexicon:
-            lexicon[token] = [str_wordID(), 1]  # Store ID and count
+            lexicon[token] = [word_counter, 1]  # Store ID and count
+            word_counter+=1
         else:
             lexicon[token][1] += 1  # Increment count
 
@@ -103,15 +103,15 @@ def list_to_string(lst):
     return ' '.join(str(s) for s in lst)
     
 #Generate a wordID for a new word
-def str_wordID():
-    global word_counter
-    global word_counter_size
-    counter = word_counter
-    numbstr = str(counter)
-    padding = word_counter_size-len(numbstr)
-    returnstr = '0' * padding + numbstr
-    word_counter+=1
-    return returnstr
+# def str_wordID():
+#     global word_counter
+#     global word_counter_size
+#     counter = word_counter
+#     numbstr = str(counter)
+#     padding = word_counter_size-len(numbstr)
+#     returnstr = '0' * padding + numbstr
+#     word_counter+=1
+#     return returnstr
 
 
 
