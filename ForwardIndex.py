@@ -17,6 +17,7 @@ with open(lexicon_path, mode='r', newline='') as file:
     reader = csv.reader(file)
     lexicon = {row[1]: [row[0], row[2]] for row in reader}
 
+
 #process each document
 def process_dataset(dataset_path):
     doc_counter = 1
@@ -31,8 +32,11 @@ def process_dataset(dataset_path):
     except Exception as e:
         print(f"An error occurred while processing JSON: {e}")
 
+
+
 ############################### FUNCTIONS #######################################
 def process_doc (doc):
+    global ForwardIndex
     global lexicon
     dict = {}
     if doc['title']:
@@ -41,6 +45,9 @@ def process_doc (doc):
         process_abstract(dict, doc['abstract'])
     if doc['keywords']:
         process_keywords(dict, doc['keywords'])
+    
+    #add constructed index to FOrward Index
+    ForwardIndex[doc['id']] = dict
 
 
 def process_title(dict, title):
