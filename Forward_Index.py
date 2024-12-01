@@ -21,7 +21,9 @@ for document in documents:
     count=0
     if i!=1:
         writefile.write(",")
-    #store metadata of document 
+    #store metadata of document
+    #data stored in the forward index will be id,offset,citations,url,authors names as a list ,
+    # and words as a dictionary with keys T(title), K(keywords) and A(abstract) with counts for each
     document_index["id"]=document["id"]
     document_index["off"]=writefile.tell()
     document_index["cite"]=document["n_citation"]
