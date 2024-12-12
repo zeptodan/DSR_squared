@@ -17,19 +17,20 @@ def clean_DataChuncks(df):
 
     count_records=len(df)    
     df = df.to_dict('records')
-    append_to_json('TheCleanData.json',df)
+    append_to_json('TheCleanData2.0.json',df)
     return count_records
 # storing the clean dara
 def append_to_json(file_path, new_record):
     # Check if the file exists
     file_exists = os.path.exists(file_path)
-
+    offset=[]
     # Open the file in r+ read mode if it doesn't exist open in w mode
     with open(file_path, "r+" if file_exists else "w") as file:
         if not file_exists or os.path.getsize(file_path) == 0:  
             file.write("[")
             for i,record in enumerate(new_record):
-                json.dump(record, file,indent=4)
+                offset.append(file.tell())
+                json.dump(record, file)
                 if i<len(new_record)-1:
                     file.write(",")
             file.write("]")
@@ -39,14 +40,22 @@ def append_to_json(file_path, new_record):
             file.seek(file.tell() - 1, os.SEEK_SET)  # Move back 1 character to overwrite the closing bracket "]"
             file.write(",")
             for record in new_record:
-                print(record)
-                json.dump(record, file,indent=4)
+                offset.append(file.tell())
+                json.dump(record, file)
                 file.write(",")
             file.seek(0, os.SEEK_END)  # Move to the end of the file
             file.seek(file.tell() - 1, os.SEEK_SET)  
             file.write("]")
 
-file_path = r"D:\Research Papers Dataset\dblp-citation-network-v14.json"
+    df=pd.DataFrame(offset)
+    csv_path='offsets.csv'
+    if not os.path.exists(csv_path):
+        # Write with headers if the file doesn't exist
+        df.to_csv(csv_path, mode='w', index=False, header=False)
+    else:
+        # Append without headers if the file exists
+        df.to_csv(csv_path, mode='a', index=False, header=False)
+file_path = r"TheCleanData.json"
 with open(file_path, "r") as file:
     count=0
     objects = ijson.items(file, "item")
