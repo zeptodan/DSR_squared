@@ -8,28 +8,45 @@ import numpy
 #FILENAMES
 lexi = "LexiconFinal.csv"
 spacy_model = "en_core_web_md"
-new_lexi = 'Clusters.csv'
+new_lexi = "Clusters.csv"
 
 ########################################################
+print("Loading model")
 nlp = spacy.load(spacy_model)
-Lexicon = pandas.read_csv(lexi, usecols=[1, 2])
+print("Loaded model\n")
 
-#convert the dataframe to a list of words
-words= pandas.read_csv(lexi, usecols=[1]).squeeze().tolist()
+print("Loading lexicon")
+Lexicon = pandas.read_csv(lexi, usecols=[1, 2])
+print("Loaded lexicon\n")
+
+#extract words
+words= Lexicon[0]
 
 #Generate a list of vectors
-vectors = numpy.array([nlp(word).vector for word in words])
+vectors = []
+vector_count = 0
+print("Generating vectors:")
+for word in words:
+    print(f"{vector_count}: {word}")
+    vectors.append(nlp(word).vector)
+    vector_count+=1
+
+print("Casting to numpy array:")
+vectors = numpy.array(vectors)
 vectors = vectors.astype(numpy.float32)
 
 #Reduce the dimensions of the embeddings using PCA in FAISS (originally 300)
+print("Using PCA to reduce dimensionality")
 pca_matrix = faiss.PCAMatrix(300, 50)
 pca_matrix.train(vectors)
 embeddings = pca_matrix.apply_py(vectors)
 
 #Generate cluster labels for each word(vector)
+print("\nUsing DBSCAN\n")
 algo = hdbscan.HDBSCAN(min_cluster_size=3, metric='cosine', prediction_data=True)
 clusters = algo.fit_predict(embeddings)
 
+print("Writing to file")
 #Append the cluster labels to the lexicon
 Lexicon['Clusters'] = clusters
 Lexicon.to_csv(new_lexi, header = ['Words', 'ID', 'Clusters'], index=False)
