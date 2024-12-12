@@ -19,24 +19,26 @@ print("Loading lexicon")
 Lexicon = pandas.read_csv(lexi, usecols=[1, 2])
 print("Loaded lexicon\n")
 
+print("Extracting words")
 #extract words
-words= Lexicon[0]
+words= Lexicon.iloc[:, 0]
+print("Extracted words\n")
 
 #Generate a list of vectors
 vectors = []
-vector_count = 0
+vector_count = 1
 print("Generating vectors:")
 for word in words:
     print(f"{vector_count}: {word}")
-    vectors.append(nlp(word).vector)
+    vectors.append(nlp(str(word)).vector)
     vector_count+=1
 
-print("Casting to numpy array:")
+print("\n\n\nCasting to numpy array:")
 vectors = numpy.array(vectors)
 vectors = vectors.astype(numpy.float32)
 
 #Reduce the dimensions of the embeddings using PCA in FAISS (originally 300)
-print("Using PCA to reduce dimensionality")
+print("\n\nUsing PCA to reduce dimensionality")
 pca_matrix = faiss.PCAMatrix(300, 50)
 pca_matrix.train(vectors)
 embeddings = pca_matrix.apply_py(vectors)
