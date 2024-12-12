@@ -3,6 +3,7 @@ import faiss
 import hdbscan
 import spacy
 import numpy
+from sklearn.preprocessing import normalize
 
 
 #FILENAMES
@@ -37,6 +38,9 @@ print("\n\n\nCasting to numpy array:")
 vectors = numpy.array(vectors)
 vectors = vectors.astype(numpy.float32)
 
+print("\nNormalizing")
+vectors = normalize(vectors, norm='l2')
+
 #Reduce the dimensions of the embeddings using PCA in FAISS (originally 300)
 print("\n\nUsing PCA to reduce dimensionality")
 pca_matrix = faiss.PCAMatrix(300, 50)
@@ -48,7 +52,7 @@ print("\nUsing DBSCAN\n")
 algo = hdbscan.HDBSCAN(min_cluster_size=3, metric='cosine', prediction_data=True)
 clusters = algo.fit_predict(embeddings)
 
-print("Writing to file")
 #Append the cluster labels to the lexicon
+print("Writing to file")
 Lexicon['Clusters'] = clusters
 Lexicon.to_csv(new_lexi, header = ['Words', 'ID', 'Clusters'], index=False)
