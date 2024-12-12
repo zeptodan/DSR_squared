@@ -32,4 +32,4 @@ clusters = algo.fit_predict(embeddings)
 
 #Append the cluster labels to the lexicon
 Lexicon['Clusters'] = clusters
-Lexicon.to_csv(new_lexi, header = ['Words', 'ID', 'Cluster'], index=False)
+Lexicon.to_csv(new_lexi, header = ['Words', 'ID', 'Clusters'], index=False)
