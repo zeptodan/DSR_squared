@@ -24,12 +24,8 @@ for document in documents:
     #store metadata of document
     #data stored in the forward index will be id,offset,citations,url,authors names as a list ,
     # and words as a dictionary with keys T(title), K(keywords) and A(abstract) with counts for each
-    document_index["id"]=document["id"]
-    document_index["off"]=writefile.tell()
-    document_index["cite"]=document["n_citation"]
-    document_index["url"]=document["url"]
-    authors=[author["name"] for author in document["authors"]]
-    document_index["authors"]=authors
+    
+    #UPDATE: removed metadata in favor of keeping offset in the actual dataset
     i+=1
     #iterate over words in title
     title=nlp(''.join(document["title"]))
@@ -38,10 +34,10 @@ for document in documents:
         wordlemma=word.lemma_.lower()
         #if word is not in document_index add it
         if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
-            document_index[lexicon[wordlemma]["id"]] = {"T":1,"K":0,"A":0}
+            document_index[lexicon[wordlemma]["id"]] = [1,0,0]
         #otherwise if it is already there increment its count by 1
         elif wordlemma in lexicon:
-            document_index[lexicon[wordlemma]["id"]]["T"]+=1
+            document_index[lexicon[wordlemma]["id"]][0]+=1
             
     #iterate over words in keywords
     keywords=nlp(''.join(document["keywords"]))
@@ -50,10 +46,10 @@ for document in documents:
         wordlemma=word.lemma_.lower()
         #if word is not in document_index
         if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
-            document_index[lexicon[wordlemma]["id"]] = {"T":0,"K":1,"A":0}
+            document_index[lexicon[wordlemma]["id"]] = [0,1,0]
         #otherwise if it is already there increment its count by 1
         elif wordlemma in lexicon:
-            document_index[lexicon[wordlemma]["id"]]["K"]+=1
+            document_index[lexicon[wordlemma]["id"]][1]+=1
             
     #iterate over words in abstract
     abstract=nlp(''.join(document["abstract"])) 
@@ -62,13 +58,13 @@ for document in documents:
         wordlemma=word.lemma_.lower()
         #if word is not in document_index
         if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
-            document_index[lexicon[wordlemma]["id"]] = {"T":0,"K":0,"A":1}
+            document_index[lexicon[wordlemma]["id"]] = [0,0,1]
         #otherwise if it is already there increment its count by 1
         elif wordlemma in lexicon:
-            document_index[lexicon[wordlemma]["id"]]["A"]+=1
-    document_index["len"]=count
+            document_index[lexicon[wordlemma]["id"]][2]+=1
+    document_index["L"]=count
     #write the index created for the document in file
-    json.dump(document_index,writefile,separators=(',',':'))
+    json.dump(document_index,writefile,separators=[",",":"])
     #clear the index for the next document
     document_index.clear()
 #close the list and then the files

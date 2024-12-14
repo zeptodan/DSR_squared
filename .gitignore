@@ -4,3 +4,5 @@ Forward_index.json
 TheCleanData.json
 Inverted_index.json
 lexi.csv
+Clusters.csv
+offsets.csv
