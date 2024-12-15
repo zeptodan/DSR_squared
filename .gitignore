@@ -4,3 +4,10 @@ Forward_index.json
 TheCleanData.json
 Inverted_index.json
 lexi.csv
+.vscode/settings.json
+1000_clean.json
+ForwardIndex.jpg
+Inverted Index structure.txt
+LexiconFinal.csv
+Scratch.py
+vectors.npy
