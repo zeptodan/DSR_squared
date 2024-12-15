@@ -4,6 +4,7 @@ Forward_index.json
 TheCleanData.json
 Inverted_index.json
 lexi.csv
+.gitignore
 .vscode/settings.json
 1000_clean.json
 ForwardIndex.jpg
