@@ -4,6 +4,7 @@ import hdbscan
 import spacy
 import numpy
 from sklearn.preprocessing import normalize
+import gc
 
 
 #FILENAMES
@@ -30,9 +31,13 @@ vectors = []
 vector_count = 1
 print("Generating vectors:")
 for word in words:
-    print(f"{vector_count}: {word}")
+    if vector_count%100 == 0:
+        print(f"{vector_count}")
     vectors.append(nlp(str(word)).vector)
+    gc.collect()
     vector_count+=1
+
+del nlp
 
 print("\n\n\nCasting to numpy array:")
 vectors = numpy.array(vectors)
