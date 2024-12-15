@@ -12,3 +12,7 @@ Inverted Index structure.txt
 LexiconFinal.csv
 Scratch.py
 vectors.npy
+Barrels/Clusters_KMEANS.csv
+Barrels/clusters.npy
+Barrels/vectors_2D_tSNE.npy
+Barrels/vectors_3D_tSNE.npy
