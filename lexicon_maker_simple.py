@@ -12,7 +12,7 @@ import os
 
 # Variables
 # modify these according to your system and preferences
-json_path = r'1000_clean_dataset.json'
+json_path = r'TheCleanData.json'
 csv_path = r'Lexicon.csv'
 word_counter_size = 7 #number of digits for the wordID
 global word_counter 
@@ -33,7 +33,7 @@ def json_lexicon(json_path):
     with open(json_path, 'r') as file:
             objects = ijson.items(file, "item")
             # data = json.load(file)
-            for i in range(1):
+            while True:
                 chunk = [obj for _, obj in zip(range(1000), objects)]  
                 if not chunk:
                     break   
