@@ -2,7 +2,6 @@ import pandas
 import numpy
 from sentence_transformers import SentenceTransformer
 import faiss
-import time
 
 
 #FILENAMES
@@ -15,6 +14,8 @@ words= Lexicon.iloc[:, 0].tolist()
 
 #extract embeddings
 vectors = model.encode(words, convert_to_numpy=True).astype("float32")
+pca_matrix = faiss.PCAMatrix(vectors.shape[1], 100)
+pca_matrix.train(vectors)
 numpy.save("vectors.npy", vectors)
 
 
