@@ -16,6 +16,9 @@ Barrels/Clusters_KMEANS.csv
 Barrels/clusters.npy
 Barrels/vectors_2D_tSNE.npy
 Barrels/vectors_3D_tSNE.npy
+Clusters.csv
+offsets.csv
+.vscode/tasks.json
 Barrels/2D_Map.html
 Barrels/3D_Cloud.html
 Barrels/Index_Barrels/0.json
