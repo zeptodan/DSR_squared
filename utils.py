@@ -4,10 +4,14 @@ import numpy
 
 
 loaded = False
+word_count = 0
+embeddings = None
 
 # Function to find similar words
 def find_matches(wordID, k):
     global loaded
+    global word_count
+    global embeddings
 
     if not loaded:
         Lexicon = pandas.read_csv("Lexicon.csv", usecols=[2])
@@ -21,8 +25,8 @@ def find_matches(wordID, k):
         return []
 
     word_embedding = embeddings[wordID].reshape(1, -1)
-    _, indices = FAISS.search(word_embedding, k)
+    distances, indices = FAISS.search(word_embedding, k)
 
     # Retrieve similar words and their distances
-    similar_words = list(indices[0])
+    similar_words = list(zip([i for i in indices[0]], distances[0]))
     return similar_words
