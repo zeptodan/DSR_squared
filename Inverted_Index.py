@@ -28,4 +28,5 @@ for document in documents:
             #if it is already there just append the list of documents where that word appears
             else:
                 inverted_index[key].append([calculate_weight(value,document["L"]),offset])
+                
 json.dump(inverted_index,writefile,separators=[",",":"])

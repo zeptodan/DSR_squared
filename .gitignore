@@ -22,3 +22,7 @@ offsets.csv
 Misc/
 Barrels/
 .vscode/
+Lexicon_small.csv
+FAISS_index.index
+lexi_clusters.csv
+clusters/

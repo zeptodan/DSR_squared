@@ -14,11 +14,11 @@ def find_matches(wordID, k):
     global embeddings
 
     if not loaded:
-        Lexicon = pandas.read_csv("Lexicon.csv", usecols=[2])
+        Lexicon = pandas.read_csv("Lexicon_small.csv", usecols=[2])
         words= Lexicon.iloc[:, 0].tolist()
         word_count = len(words)
-        embeddings = numpy.load(".\\semantic\\vectors.npy")
-        FAISS = faiss.read_index(".\\semantic\\Faiss_index.index")
+        embeddings = numpy.load("vectors.npy")
+        FAISS = faiss.read_index("Faiss_index.index")
         loaded = True
     
     if wordID<0 or wordID>word_count:
