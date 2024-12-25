@@ -8,7 +8,7 @@ words=json.load(file)
 file.close()
 i=0
 count=0
-path=r"clusters/cluster-"
+path=r"barrels/barrel-"
 file=open(path+"0" + ".json","w")
 cluster={}
 for key,value in words.items():
@@ -24,12 +24,11 @@ for key,value in words.items():
     lexicon[int(key)]["cluster"] = i
 if cluster:
     json.dump(cluster,file,indent=4)
-    
-for key, dic in lexicon.items():
-    if "cluster" not in dic:
-        print(dic)
-        print(key)
 with open("lexi_clusters.csv", mode="w", newline="",encoding="UTF-8") as file:
     writer = csv.writer(file)
     for key, value in lexicon.items():
+        if "cluster" in value:
             writer.writerow([value["count"], value["word"],key,value["cluster"]])
+        else:
+            print(value)
+            writer.writerow([value["count"], value["word"],key])

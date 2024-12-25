@@ -15,8 +15,10 @@ def search(query : str,lexi,nlp):
                 process.start()
         for process in processes:
             processes.join()
-        combine_results(shared_list)
-        # getDocs(offsets)
+        tmpDocs=combine_results(shared_list)
+        resultantDocs=list(tmpDocs)
+        resultantDocs.sort()
+        return resultantDocs
         
 
 def load_and_rank(wordtoLoad,shared_list,lexi):
@@ -40,8 +42,6 @@ def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
         words_to_doc[word] = data[word]
     
     
-def getDocs(offsets):
-    print("TODO")
 
 
 # with multiprocessing.Manager() as manager:
