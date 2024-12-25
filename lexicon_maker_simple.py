@@ -12,8 +12,8 @@ import os
 
 # Variables
 # modify these according to your system and preferences
-json_path = r'TheCleanData.json'
-csv_path = r'Lexicon.csv'
+json_path = r'1000_clean_dataset.json'
+csv_path = r'Lexicon_small.csv'
 word_counter_size = 7 #number of digits for the wordID
 global word_counter 
 word_counter = 1
@@ -23,7 +23,7 @@ nlp = spacy.load("en_core_web_md")
 #Main
 lexicon = {}
 def json_lexicon(json_path):
-
+    global doc_counter
     doc_counter = 1
     
 
@@ -62,10 +62,11 @@ def process_doc(obj):
     master_string = ''
 
     #extract title, keywords, abstract
-    master_string +=(' '+ obj['title'].strip())
+    master_string +=( obj['title'].strip())
     master_string+=(' '+  obj['abstract'].strip())
     master_string +=(' '+  list_to_string(obj['keywords']).strip())
-
+    if doc_counter == 833 or doc_counter == 363:
+        print(master_string)
     
     if not master_string: 
         return
@@ -73,8 +74,10 @@ def process_doc(obj):
     #lemmatize and filter words
     unique_words = {token.lemma_ for token in master_string
                 if token.is_alpha and not token.is_stop
-                and len(token) > 2 and token.lemma_ in nlp.vocab}
+                and len(token) > 2 and token.is_oov}
     for token in unique_words:
+        if doc_counter == 363 or doc_counter==833:
+            print(token)
         if token not in lexicon:
             lexicon[token] = [word_counter, 1]  # Store ID and count
             word_counter+=1

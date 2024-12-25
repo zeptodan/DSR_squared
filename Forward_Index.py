@@ -3,9 +3,8 @@ import ijson
 import spacy
 import json
 #load lexicon as dictionary
-lexi=pd.read_csv("Lexicon.csv",names=["count","word","id"])
+lexi = pd.read_csv("Lexicon_small.csv", names=["count", "word", "id"], keep_default_na=False, na_values=[])
 lexicon=lexi.set_index("word").to_dict(orient="index")
-
 #open dataset file and file to write in
 file=open("1000_clean_dataset.json","r")
 writefile=open("Forward_index.json","w")
@@ -28,41 +27,39 @@ for document in documents:
     #UPDATE: removed metadata in favor of keeping offset in the actual dataset
     i+=1
     #iterate over words in title
-    title=nlp(''.join(document["title"]))
-    count+=len(title)
-    for word in title:
-        wordlemma=word.lemma_.lower()
+    titlecount=document["title"].count(" ") +1
+    abstractcount=document["abstract"].count(" ")+1
+    Stringkeywords=' '.join(document["keywords"]).lower().strip()
+    keywordcount=Stringkeywords.count(" ")+1
+    count+=titlecount+keywordcount+abstractcount
+    master_string=nlp(document["title"].lower().strip()+" "+document["abstract"].lower().strip()+" "+Stringkeywords)
+    for word in master_string:
+        if word.is_punct:
+            continue
+        wordlemma=word.lemma_
         #if word is not in document_index add it
-        if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
-            document_index[lexicon[wordlemma]["id"]] = [1,0,0]
-        #otherwise if it is already there increment its count by 1
-        elif wordlemma in lexicon:
-            document_index[lexicon[wordlemma]["id"]][0]+=1
-            
-    #iterate over words in keywords
-    keywords=nlp(''.join(document["keywords"]))
-    count+=len(keywords)
-    for word in keywords:
-        wordlemma=word.lemma_.lower()
-        #if word is not in document_index
-        if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
-            document_index[lexicon[wordlemma]["id"]] = [0,1,0]
-        #otherwise if it is already there increment its count by 1
-        elif wordlemma in lexicon:
-            document_index[lexicon[wordlemma]["id"]][1]+=1
-            
-    #iterate over words in abstract
-    abstract=nlp(''.join(document["abstract"])) 
-    count+=len(abstract)
-    for word in abstract:
-        wordlemma=word.lemma_.lower()
-        #if word is not in document_index
-        if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
-            document_index[lexicon[wordlemma]["id"]] = [0,0,1]
-        #otherwise if it is already there increment its count by 1
-        elif wordlemma in lexicon:
-            document_index[lexicon[wordlemma]["id"]][2]+=1
+        if titlecount >0:
+            if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
+                document_index[lexicon[wordlemma]["id"]] = [1,0,0]
+            #otherwise if it is already there increment its count by 1
+            elif wordlemma in lexicon:
+                document_index[lexicon[wordlemma]["id"]][0]+=1
+            titlecount-=1
+        elif abstractcount >0:
+            if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
+                document_index[lexicon[wordlemma]["id"]] = [0,0,1]
+            #otherwise if it is already there increment its count by 1
+            elif wordlemma in lexicon:
+                document_index[lexicon[wordlemma]["id"]][2]+=1
+            abstractcount-=1
+        else:
+            if wordlemma in lexicon and lexicon[wordlemma]["id"] not in document_index:
+                document_index[lexicon[wordlemma]["id"]] = [0,1,0]
+            #otherwise if it is already there increment its count by 1
+            elif wordlemma in lexicon:
+                document_index[lexicon[wordlemma]["id"]][1]+=1
     document_index["L"]=count
+    document_index["cite"]=document["n_citation"]
     #write the index created for the document in file
     json.dump(document_index,writefile,separators=[",",":"])
     #clear the index for the next document
@@ -71,4 +68,3 @@ for document in documents:
 writefile.write("]")
 writefile.close()
 file.close()
-    

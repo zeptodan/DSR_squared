@@ -22,5 +22,12 @@ offsets.csv
 Misc/
 Barrels/
 .vscode/
+Lexicon_small.csv
+FAISS_index.index
+lexi_clusters.csv
+clusters/
+__pycache__/
+TheCleanData2.0.json
+
 Scratch.py
 Scratch2.py
