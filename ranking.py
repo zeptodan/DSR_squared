@@ -31,7 +31,7 @@ def combine_results(results):
     for local_resultant_docs in results:
         for doc_id, score in local_resultant_docs.items():
             if doc_id in resultant_docs:
-                resultant_docs[doc_id] += 1
+                resultant_docs[doc_id] += score
             else:
                 resultant_docs[doc_id] = score
 
@@ -41,7 +41,7 @@ def main():
     global lexicon, words_and_docs, TOTAL_DOCS, similarity,resultant_docs
 
     lexicon={'hello':(0,2),'world':(1,3),'python':(2,4)}
-    words_and_docs={'hello':[[0,1,12]],'world':[[1,.5,2]]}
+    words_and_docs={'hello':[[69,1,12]],'world':[[70,.5,2]]}
     TOTAL_DOCS=4040997
     resultant_docs={}
     similarity={'hello':0.5,'world':1,'python':3}
