@@ -2,7 +2,8 @@ import utils
 import multiprocessing
 import json
 import time
-from ranking import rank_similar_words,combine_results
+from ranking import rank_similar_words
+global tmpDocs
 def search(query : str,lexi,nlp):
     words=nlp(query)
     processes=[]
@@ -18,13 +19,13 @@ def search(query : str,lexi,nlp):
         print("multiprocessing creation: " + str(time.time()-start))
         for process in processes:
             process.join()
-        tmpDocs=combine_results(shared_list)
         resultantDocs=[[key,value] for key,value in tmpDocs.items()]
         resultantDocs.sort(key=lambda x:x[1],reverse=True)
         return resultantDocs
         
 
 def load_and_rank(wordtoLoad,shared_list,lexi):
+    global tmpDocs
     words_to_doc={}
     barrels={}
     newWords = {wordtoLoad: 1}#utils.find_matches(wordtoLoad,5,lexi)    
@@ -36,7 +37,7 @@ def load_and_rank(wordtoLoad,shared_list,lexi):
     for barrel,wordstoLoad in barrels.items():
         load_words_from_barrel(words_to_doc,barrel,wordstoLoad,lexi)
     
-    shared_list.append(rank_similar_words(words_to_doc,newWords,lexi, 4040997))
+    shared_list.append(rank_similar_words(words_to_doc,newWords,lexi, 4040997,tmpDocs))
         
 def load_words_from_barrel(words_to_doc,barrel,wordstoLoad,lexi):
     file=open("barrels/barrel-" + barrel + ".json")

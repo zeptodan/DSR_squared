@@ -1,12 +1,13 @@
 import math
 from multiprocessing import Pool
+import timeit
 def rank_similar_words(words_and_docs, similarity, lexicon, total_docs,resultant_docs):
     
     for word,docs in words_and_docs.items():
-        doc_count=lexicon[word][1]
+        doc_count=lexicon[word]['count']
         idf=math.log(total_docs/doc_count)
         for doc in docs:
-            score=((idf*doc[1])+similarity[word]+doc[2])
+            score=((idf*doc[1])*similarity[word]+doc[2])
             if doc[0] in resultant_docs:
                 resultant_docs[doc[0]] += score
             else:
@@ -20,7 +21,8 @@ def main():
     resultant_docs={}
 
     similarity={'hello':1,'world':2,'python':3}
-    rank_similar_words(words_and_docs, similarity, lexicon, TOTAL_DOCS,resultant_docs)
+    execution_time = timeit.timeit(lambda: rank_similar_words(words_and_docs, similarity, lexicon, TOTAL_DOCS,resultant_docs), number=1)
+    print(f"--- {execution_time * 1_000:.7f} milliseconds ---")
     print(resultant_docs)
 
 if __name__ == '__main__':
