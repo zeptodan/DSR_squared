@@ -26,3 +26,4 @@ Lexicon_small.csv
 FAISS_index.index
 lexi_clusters.csv
 clusters/
+__pycache__/

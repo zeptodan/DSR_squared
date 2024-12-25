@@ -3,18 +3,18 @@ import multiprocessing
 import json
 from ranking import rank_similar_words,combine_results
 def search(query : str,lexi,nlp):
-    words=nlp.load(query)
+    words=nlp(query)
     processes=[]
     with multiprocessing.Manager() as manager:
         shared_list=manager.list()
         for word in words:
             wordlemma = word.lemma_
             if wordlemma in lexi:
-                process = multiprocessing.Process(target=load_and_rank(shared_list,wordlemma,lexi))
+                process = multiprocessing.Process(target=load_and_rank,args=(shared_list,wordlemma,lexi))
                 processes.append(process)
                 process.start()
         for process in processes:
-            processes.join()
+            process.join()
         tmpDocs=combine_results(shared_list)
         resultantDocs=list(tmpDocs)
         resultantDocs.sort()
