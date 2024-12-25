@@ -59,6 +59,7 @@ for document in documents:
             elif wordlemma in lexicon:
                 document_index[lexicon[wordlemma]["id"]][1]+=1
     document_index["L"]=count
+    document_index["cite"]=document["n_citation"]
     #write the index created for the document in file
     json.dump(document_index,writefile,separators=[",",":"])
     #clear the index for the next document

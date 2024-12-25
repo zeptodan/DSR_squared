@@ -20,13 +20,13 @@ for document in documents:
     #iterate over the key value pairs in the document
     for key,value in document.items():
         #ignore if it is not a word id
-        if key !="L":
+        if key !="L" and key != "cite":
             #if the word is not in inverted index
             #for each word store list of document id, its weight and documents offset in forward index
             if key not in inverted_index:
-                inverted_index[key]=[[calculate_weight(value,document["L"]),offset]]
+                inverted_index[key]=[[offset,calculate_weight(value,document["L"]),document["cite"]]]
             #if it is already there just append the list of documents where that word appears
             else:
-                inverted_index[key].append([calculate_weight(value,document["L"]),offset])
+                inverted_index[key].append([offset,calculate_weight(value,document["L"]),document["cite"]])
                 
 json.dump(inverted_index,writefile,separators=[",",":"])

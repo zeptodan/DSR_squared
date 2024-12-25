@@ -1,32 +1,34 @@
 import math
 from multiprocessing import Pool
-
+import time
 
 def rank_single_word(word ,docs,similarity, lexicon, total_docs):
     local_resultant_docs={}
-    doc_count=lexicon[word][1]
+    doc_count=lexicon[word]["count"]
     idf=math.log(total_docs/doc_count)
-
-    min_citations = min(doc[1] for doc in docs)
-    max_citations = max(doc[1] for doc in docs)
+    no_cit=False
+    min_citations = min(doc[2] for doc in docs)
+    max_citations = max(doc[2] for doc in docs)
     if(min_citations==max_citations):
         no_cit=True
     normalized_citations=0
     for doc in docs:
         if not no_cit:
-            normalized_citations=(doc[1]-min_citations)/(max_citations-min_citations)
+            normalized_citations=(doc[2]-min_citations)/(max_citations-min_citations)
         score=((idf*doc[1])*similarity+normalized_citations)
         local_resultant_docs[doc[0]]=score      
 
     return local_resultant_docs
 
 def rank_similar_words(words_and_docs, similarity, lexicon, total_docs):
+    start = time.time()
     resultant_docs={}
-    args=[(word,docs,similarity[word],lexicon,TOTAL_DOCS) for word,docs in words_and_docs.items()]
+    args=[(word,docs,similarity[word],lexicon,total_docs) for word,docs in words_and_docs.items()]
     with Pool() as pool:
         results=pool.starmap(rank_single_word,args)
     resultant_docs=combine_results(results)
-    print(resultant_docs)
+    print("ranking time: " + str(time.time() - start))
+    return resultant_docs
 
 def combine_results(results):    
     resultant_docs={}
