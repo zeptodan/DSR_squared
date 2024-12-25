@@ -25,17 +25,17 @@ def rank_similar_words(words_and_docs, similarity, lexicon, total_docs):
     args=[(word,docs,similarity[word],lexicon,TOTAL_DOCS) for word,docs in words_and_docs.items()]
     with Pool() as pool:
         results=pool.starmap(rank_single_word,args)
-    combine_results(results)
+    resultant_docs=combine_results(results)
+    print(resultant_docs)
 
 def combine_results(results):    
+    resultant_docs={}
     for local_resultant_docs in results:
         for doc_id, score in local_resultant_docs.items():
             if doc_id in resultant_docs:
                 resultant_docs[doc_id] += score
             else:
                 resultant_docs[doc_id] = score
-
-    print(resultant_docs)
     return resultant_docs
 def main():
     global lexicon, words_and_docs, TOTAL_DOCS, similarity,resultant_docs
