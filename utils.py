@@ -19,8 +19,8 @@ def resource_loader():
         global FAISS
         global lexicon
 
-        Lexicon = pandas.read_csv("Lexicon_small.csv", usecols=[2])
-        words= Lexicon.iloc[:, 0].tolist()
+        x = pandas.read_csv("Lexicon_small.csv", usecols=[2])
+        words= x.iloc[:, 0].tolist()
         word_count = len(words)
         embeddings = numpy.load("vectors.npy")
         FAISS = faiss.read_index("Faiss_index.index")
