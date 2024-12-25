@@ -1,7 +1,7 @@
 import utils
 import multiprocessing
 import json
-#from ranking import sas
+from ranking import rank_similar_words,combine_results
 def search(query : str,lexi,nlp):
     words=nlp.load(query)
     processes=[]
@@ -15,8 +15,8 @@ def search(query : str,lexi,nlp):
                 process.start()
         for process in processes:
             processes.join()
-        #combine()
-        #getDocs(offsets)
+        combine_results(shared_list)
+        # getDocs(offsets)
         
 
 def load_and_rank(wordtoLoad,shared_list,lexi):
@@ -30,7 +30,8 @@ def load_and_rank(wordtoLoad,shared_list,lexi):
         barrels[barrel].append(newWord)
     for barrel,wordstoLoad in barrels.items():
         load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
-    #docs= rank(newWords,words_to_doc)
+    
+    shared_list.append(rank_similar_words(words_to_doc,newWords,lexi, 4040997))
         
 def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
     file=open("barrels/barrel-" + str(barrel) + ".json")
