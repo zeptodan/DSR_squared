@@ -74,7 +74,7 @@ def process_doc(obj):
     #lemmatize and filter words
     unique_words = {token.lemma_ for token in master_string
                 if token.is_alpha and not token.is_stop
-                and len(token) > 2 and token.text in nlp.vocab}
+                and len(token) > 2 and token.is_oov}
     for token in unique_words:
         if doc_counter == 363 or doc_counter==833:
             print(token)
