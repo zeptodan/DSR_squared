@@ -12,12 +12,13 @@ lexicon = {}
 
 def resource_loader():
     global loaded
-    global word_count
-    global embeddings
-    global FAISS
-    global lexicon
-
+    
     if not loaded:
+        global word_count
+        global embeddings
+        global FAISS
+        global lexicon
+
         Lexicon = pandas.read_csv("Lexicon_small.csv", usecols=[2])
         words= Lexicon.iloc[:, 0].tolist()
         word_count = len(words)
