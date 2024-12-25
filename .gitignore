@@ -27,3 +27,4 @@ FAISS_index.index
 lexi_clusters.csv
 clusters/
 __pycache__/
+TheCleanData2.0.json

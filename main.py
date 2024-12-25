@@ -2,7 +2,7 @@ import pandas as pd
 import spacy
 from documentRetrieval import search
 import time
-dataset=r"TheCleanData"
+dataset=r"TheCleanData2.0"
 def main():
     lexi = pd.read_csv("Lexi_clusters.csv", names=["count", "word", "id","barrel"],dtype={"count":int, "word":str, "id":str,"barrel":str}, keep_default_na=False, na_values=[])
     lexicon=lexi.set_index("word").to_dict(orient="index")
@@ -12,6 +12,8 @@ def main():
     docs_to_load = search(query,lexicon,nlp)
     print("time for whole search: " + str(time.time() - start))
     docs=getDocs(docs_to_load)
+    print("top result: ")
+    print(docs[0])
         
 def getDocs(docs_to_load):
     start = time.time()
