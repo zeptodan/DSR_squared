@@ -5,14 +5,16 @@ import SearchBar from '@/components/SearchBar'
 import SearchResults from '@/components/SearchResults'
 import ScrollToTop from '@/components/ScrollToTop'
 import { Button } from '@/components/ui/button'
-import { LayoutGrid, LayoutList, SortAsc } from 'lucide-react'
+import { LayoutGrid, LayoutList, ArrowDownAZ, Calendar, FileText, QuoteIcon as Citation } from 'lucide-react'
 import { logoFont } from '@/styles/fonts'
+import AddPaperForm from '@/components/AddPaperForm'
 
 export default function Home() {
   const [query, setQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isTwoColumns, setIsTwoColumns] = useState(false)
   const [sortBy, setSortBy] = useState('relevance')
+  const [showAddPaper, setShowAddPaper] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -30,6 +32,8 @@ export default function Home() {
       mainRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }
+
+  const buttonClasses = "bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50"
 
   return (
     <main ref={mainRef} className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
@@ -53,23 +57,34 @@ export default function Home() {
           </div>
         )}
         {query && (
-          <div className="max-w-6xl mx-auto px-4 mt-8">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSortBy(sortBy === 'relevance' ? 'date' : 'relevance')}
-                className="bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors w-full sm:w-auto rounded-full"
-              >
-                <SortAsc className="h-4 w-4 mr-2" />
-                Sort by: {sortBy === 'relevance' ? 'Relevance' : 'Date'}
-              </Button>
-              <div className="hidden sm:flex items-center space-x-2">
+          <div className="max-w-6xl mx-auto px-4 mt-8 pb-16">
+            <div className="flex justify-between items-center w-full mb-4">
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setSortBy(sortBy === 'relevance' ? 'date' : sortBy === 'date' ? 'citations' : 'relevance')}
+                  className={buttonClasses}
+                >
+                  {sortBy === 'relevance' ? <ArrowDownAZ className="h-4 w-4" /> : 
+                   sortBy === 'date' ? <Calendar className="h-4 w-4" /> :
+                   <Citation className="h-4 w-4" />}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowAddPaper(true)}
+                  className={buttonClasses}
+                >
+                  <FileText className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex items-center space-x-2">
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => setIsTwoColumns(false)}
-                  className={`bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full ${!isTwoColumns ? 'bg-blue-500 text-white' : ''}`}
+                  className={`${buttonClasses} ${!isTwoColumns ? 'bg-blue-500 text-white' : ''}`}
                 >
                   <LayoutList className="h-4 w-4" />
                 </Button>
@@ -77,7 +92,7 @@ export default function Home() {
                   variant="outline"
                   size="icon"
                   onClick={() => setIsTwoColumns(true)}
-                  className={`bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full ${isTwoColumns ? 'bg-blue-500 text-white' : ''}`}
+                  className={`${buttonClasses} ${isTwoColumns ? 'bg-blue-500 text-white' : ''}`}
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </Button>
@@ -88,6 +103,7 @@ export default function Home() {
         )}
       </div>
       <ScrollToTop />
+      {showAddPaper && <AddPaperForm onClose={() => setShowAddPaper(false)} />}
     </main>
   )
 }
