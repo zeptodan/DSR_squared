@@ -1,22 +1,25 @@
-import pandas as pd
-import spacy
 from documentRetrieval import search
 import time
+import json
 dataset=r"TheCleanData2.0"
+
 def main():
-    lexi = pd.read_csv("Lexi_clusters.csv", names=["count", "word", "id","barrel"],dtype={"count":int, "word":str, "id":str,"barrel":str}, keep_default_na=False, na_values=[])
-    lexicon=lexi.set_index("word").to_dict(orient="index")
-    nlp = spacy.load("en_core_web_md")
+    # resource_loader()
     query = input("enter: ")
     start = time.time()
-    docs_to_load = search(query,lexicon,nlp)
-    print("time for whole search: " + str(time.time() - start))
+    docs_to_load = search(query)
     docs=getDocs(docs_to_load)
     print("top result: ")
-    print(docs[0])
-        
+    docs = [json.loads(doc) for doc in docs]
+    for doc in docs:
+        print(f'The title is {doc['title']}')
+        print(f'The keywords is {doc['keywords']}')
+        print(doc["abstract"])
+        print("\n--------------------------------------")
+
+    print("time for whole search: " + str(time.time() - start))
+
 def getDocs(docs_to_load):
-    start = time.time()
     stack=[]
     docs=[]
     i=0
@@ -36,10 +39,10 @@ def getDocs(docs_to_load):
             i+=1
             if i==10:
                 break
-    print("getting docs from dataset: " + str(time.time() - start))
     return docs
         
-        
+          
+ 
 if __name__ == "__main__":
     main()
         
