@@ -3,7 +3,7 @@ import ijson
 import spacy
 import json
 #load lexicon as dictionary
-lexi = pd.read_csv("Lexicon_small.csv", names=["count", "word", "id"], keep_default_na=False, na_values=[])
+lexi = pd.read_csv("lexi_clusters.csv", names=["count", "word", "id","cluster"], keep_default_na=False, na_values=[])
 lexicon=lexi.set_index("word").to_dict(orient="index")
 #open dataset file and file to write in
 file=open("1000_clean_dataset.json","r")

@@ -5,10 +5,10 @@ from utils import FAISS,lexicon,nlp,words,embeddings
 tmpDocs={}
 def search(query : str):
     global tmpDocs
-    words=nlp(query)
+    doc = nlp(query)  # renamed from 'words' to 'doc'
     start = time.time()
-    for word in words:
-        wordlemma = word.lemma_
+    for token in doc:  # iterate over spaCy tokens
+        wordlemma = token.lemma_
         if wordlemma in lexicon:
             load_and_rank(wordlemma)
     resultantDocs=[[key,value] for key,value in tmpDocs.items()]
@@ -51,8 +51,9 @@ def find_matches(word, k):
     matches = {}
 
     for ID, distance in zip(indices[0], distances[0]):
-        matches[words[str(ID)]] = distance
-    
+        print(words[str(ID)]['word'])
+        matches[words[str(ID)]['word']] = distance
+    print(matches)
     return matches
 
 

@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 import csv
-lexi = pd.read_csv("Lexicon_small.csv", names=["count", "word", "id"], keep_default_na=False, na_values=[])
+lexi = pd.read_csv("lexi_clusters.csv", names=["count", "word", "id","cluster"], keep_default_na=False, na_values=[])
 lexicon=lexi.set_index("id").to_dict(orient="index")
 file=open("inverted_index.json","r")
 words=json.load(file)

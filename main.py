@@ -1,5 +1,6 @@
 from documentRetrieval import search
 import time
+import json
 dataset=r"TheCleanData2.0"
 
 def main():
@@ -7,13 +8,18 @@ def main():
     query = input("enter: ")
     start = time.time()
     docs_to_load = search(query)
-    print("time for whole search: " + str(time.time() - start))
     docs=getDocs(docs_to_load)
     print("top result: ")
-    print(docs[0])
-        
+    docs = [json.loads(doc) for doc in docs]
+    for doc in docs:
+        print(f'The title is {doc['title']}')
+        print(f'The keywords is {doc['keywords']}')
+        print(doc["abstract"])
+        print("\n--------------------------------------")
+
+    print("time for whole search: " + str(time.time() - start))
+
 def getDocs(docs_to_load):
-    start = time.time()
     stack=[]
     docs=[]
     i=0
@@ -33,7 +39,6 @@ def getDocs(docs_to_load):
             i+=1
             if i==10:
                 break
-    print("getting docs from dataset: " + str(time.time() - start))
     return docs
         
           

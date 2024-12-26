@@ -1,18 +1,57 @@
-# import pandas as pd
-# import spacy
-# import ijson
-# import os
-# nlp = spacy.load("en_core_web_md")
+import spacy
+import faiss
+import numpy as np
 
-# master_string="We discuss hardware extensions to 3D-texturing units, which are very small but nevertheless remove some substantial performance limits typically found when using a 3D-texturing unit for volume rendering. The underlying algorithm uses only a slight mod$cation of existing method, which limits negative impacts on application software. In particular, the method speeds up the compositing operation, improves texture cache eflciency and allows for early ray termination and empty space skipping. Early ray termination can not be used in the traditional approach. Simulations show that, depending on data set properties, the performance of readily available, low-cost PC graphics accelerators is already suflcient for real-time volume visualization. Thus, in terms ofperformance, the TRIANGLECASTER-extensions can make dedicated volume rendering accelerators unnecessary."
-# master_string = nlp(master_string.lower())
-# for token in master_string:
-#     if token.text in nlp.vocab:
-#         print(token.text)
-# ali={token.lemma_ for token in master_string
-#                 if token.is_alpha and not token.is_stop
-#                 and len(token) > 2 and token.text in nlp.vocab}
-# print(ali)
-file = open("TheCleanData.json","r")
-file.seek(5137)
-print(file.read(1))
+# Load spaCy model
+nlp = spacy.load('en_core_web_md')
+
+# Example lexicon and embeddings (replace with your actual data)
+lexicon = {
+    'example': {'id': 0},
+    'test': {'id': 1},
+    'word': {'id': 2}
+}
+words = {
+    '0': 'example',
+    '1': 'test',
+    '2': 'word'
+}
+embeddings = np.array([
+    nlp('example').vector,
+    nlp('test').vector,
+    nlp('word').vector
+])
+
+# Create a FAISS index and add embeddings
+dimension = embeddings.shape[1]
+index = faiss.IndexFlatL2(dimension)
+index.add(embeddings)
+
+def find_matches(word, k):
+    # Get word embedding using spaCy
+    doc = nlp(word)
+    word_embedding = doc.vector.reshape(1, -1)
+
+    # Perform a search
+    distances, indices = index.search(word_embedding, k)
+    matches = {}
+
+    for ID, distance in zip(indices[0], distances[0]):
+        matches[words[str(ID)]] = distance
+    
+    return matches
+
+# Example usage
+word = "example"
+k = 2
+matches = find_matches(word, k)
+print(matches)
+
+# with multiprocessing.Manager() as manager:
+#     shared_dict=manager.dict()
+#     for barrel,wordstoLoad in barrels.items():
+#         process = multiprocessing.Process(target=load_words_from_barrel(shared_dict,barrel,wordstoLoad))
+#         processes.append(process)
+#         process.start()
+#     for process in processes:
+#         process.join()
