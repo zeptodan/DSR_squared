@@ -1,11 +1,15 @@
 import json
+import os
 from utils import nlp,lexicon
 from Inverted_Index import calculate_weight
 def docAdd(doc):
     file = open("TheCleanData2.0.json","a")
+    file.seek(0, os.SEEK_END)  # Move to the end of the file
+    file.seek(file.tell() - 1, os.SEEK_SET)  # Move back 1 character to overwrite the closing bracket "]"
+    file.write(",")
     offset=file.tell()
     json.dump(doc,file,separators=[",",":"])
-    
+    file.write("]")
     count=0
     titlecount=doc["title"].count(" ") +1
     abstractcount=doc["abstract"].count(" ")+1

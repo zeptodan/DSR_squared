@@ -25,8 +25,9 @@ def load_and_rank(wordtoLoad):
         barrels[barrel].append(newWord)
     for barrel,wordstoLoad in barrels.items():
         load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
-    
-    return rank_similar_words(words_to_doc,newWords,lexicon, 4040997)
+    tmpDocs={}
+    rank_similar_words(words_to_doc,newWords,lexicon, 4040997,tmpDocs)
+    return tmpDocs
         
 def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
     file=open("barrels/barrel-" + barrel + ".json")
