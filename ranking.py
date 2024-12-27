@@ -1,6 +1,5 @@
 import math
 def rank_similar_words(words_and_docs, similarity, lexicon, total_docs,resultant_docs):
-    print("nnnn")
     for word,docs in words_and_docs.items():
         doc_count=lexicon[word]['count']
         idf=math.log(total_docs/doc_count)

@@ -1,100 +1,111 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useCallback } from 'react'
-import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SearchResult {
-  id: number
-  title: string
-  description: string
-  authors: string[]
-  date: string
-  citations: number
+  id: number;
+  title: string;
+  description: string;
+  authors: string[];
+  date: string;
+  citations: number;
+  url: string;
 }
 
 interface SearchResultsProps {
-  query: string
-  isTwoColumns: boolean
-  sortBy: string
+  query: string;
+  isTwoColumns: boolean;
+  sortBy: string;
 }
 
 export default function SearchResults({ query, isTwoColumns, sortBy }: SearchResultsProps) {
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalResults, setTotalResults] = useState(0)
-  const [searchTime, setSearchTime] = useState(0)
-  const [error, setError] = useState<string | null>(null)
-  const _resultsPerPage = 10
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const [searchTime, setSearchTime] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const _resultsPerPage = 10;
 
   const fetchResults = useCallback(async (page: number) => {
-    setError(null)
+    setError(null);
     try {
-      const response = await fetch(`http://localhost:8000/search?query=${encodeURIComponent(query)}&page=${page}&sort_by=${sortBy}`)
+      const response = await fetch(
+        `http://localhost:8000/search?query=${encodeURIComponent(query)}&page=${page}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch results')
+        throw new Error('Failed to fetch results');
       }
-      const data = await response.json()
-      setResults(data.results)
-      setTotalPages(data.total_pages)
-      setTotalResults(data.total_results)
-      setSearchTime(data.search_time)
+      const data = await response.json();
+      console.log('Fetched data:', data);
+
+      setResults(data.results);
+      setTotalPages(data.total_pages);
+      setTotalResults(data.total_results);
+      setSearchTime(data.search_time);
     } catch (err) {
-      setError('An error occurred while fetching results. Please try again.')
-      console.error(err)
+      setError('An error occurred while fetching results. Please try again.');
+      console.error(err);
     }
-  }, [query, sortBy])
+  }, [query]);
 
   useEffect(() => {
     if (query) {
-      fetchResults(currentPage)
+      fetchResults(currentPage);
     } else {
-      setResults([])
-      setTotalPages(1)
-      setTotalResults(0)
-      setSearchTime(0)
+      setResults([]);
+      setTotalPages(1);
+      setTotalResults(0);
+      setSearchTime(0);
     }
-  }, [query, currentPage, sortBy, fetchResults])
+  }, [query, currentPage, fetchResults]);
 
   useEffect(() => {
-    setCurrentPage(1)
-  }, [query, sortBy])
+    setCurrentPage(1);
+  }, [query]);
 
-  useEffect(() => {
+  const sortedResults = [...results].sort((a, b) => {
     if (sortBy === 'date') {
-      setResults(prev => [...prev].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()))
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     } else if (sortBy === 'citations') {
-      setResults(prev => [...prev].sort((a, b) => b.citations - a.citations))
-    } else {
-      // 'relevance' sorting (which is the default order from generateResults)
-      //setResults(generateResults(currentPage, resultsPerPage))
+      return b.citations - a.citations;
     }
-  }, [sortBy, currentPage, query])
+    return 0; // 'relevance' or default order
+  });
 
   const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage)
-  }
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
-  if (!query) return null
+  if (!query) return null;
 
-  const buttonClasses = "bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50"
+  const buttonClasses =
+    'bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50';
 
   return (
     <div>
-      {error && (
-        <div className="text-red-500 mb-4">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
       <div className="text-sm text-gray-400 mb-4">
         {totalResults} results returned in {searchTime.toFixed(4)} seconds
       </div>
-      <div className={`grid gap-4 sm:gap-6 ${isTwoColumns ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
-        {results.map((result) => (
-          <div key={result.id} className="p-4 sm:p-6 rounded-md bg-white/10 backdrop-blur-md hover:bg-white/15 transition-colors">
+      <div
+        className={`grid gap-4 sm:gap-6 ${isTwoColumns ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}
+      >
+        {sortedResults.map((result) => (
+          <div
+            key={result.id}
+            className="p-4 sm:p-6 rounded-md bg-white/10 backdrop-blur-md hover:bg-white/15 transition-colors"
+          >
             <h2 className="text-lg sm:text-xl font-semibold mb-2 group">
-              <a href="#" className="text-white group-hover:text-blue-500 transition-colors">
+              <a
+                href={result.url}
+                target='_blank'
+                className="text-white group-hover:text-blue-500 transition-colors"
+              >
                 <span className="bg-left-bottom bg-gradient-to-r from-blue-500 to-blue-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-300 ease-out">
                   {result.title}
                 </span>
@@ -122,7 +133,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <Button
             key={page}
-            variant={page === currentPage ? "default" : "outline"}
+            variant={page === currentPage ? 'default' : 'outline'}
             onClick={() => handlePageChange(page)}
             className={`rounded-full w-10 h-10 ${
               page === currentPage
@@ -144,5 +155,5 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
         </Button>
       </div>
     </div>
-  )
+  );
 }
