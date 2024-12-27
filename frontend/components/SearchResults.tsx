@@ -28,18 +28,6 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   const [error, setError] = useState<string | null>(null)
   const _resultsPerPage = 10
 
-  // const generateResults = (page: number, count: number) => {
-  //   const startIndex = (page - 1) * count + 1
-  //   return Array.from({ length: count }, (_, i) => ({
-  //     id: startIndex + i,
-  //     title: `Research on ${query}: Implications for DSR² Technology (Result ${startIndex + i})`,
-  //     description: `This groundbreaking research explores the applications of ${query} in the context of DSR² technology. The study provides valuable insights into improving search algorithms and user experience.`,
-  //     authors: ['John Doe', 'Jane Smith', 'Alice Johnson'],
-  //     date: `202${Math.floor(Math.random() * 4)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
-  //     citations: Math.floor(Math.random() * 1000)
-  //   }))
-  // }
-
   const fetchResults = useCallback(async (page: number) => {
     setError(null)
     try {
@@ -158,4 +146,3 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
     </div>
   )
 }
-
