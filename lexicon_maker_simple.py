@@ -1,122 +1,71 @@
-'''
-Takes the dataset and generates a lexicon for each word
-wordID, word, doc-count
-'''
 import pandas as pd
 import spacy
 import ijson
 import os
-
-
-
+from collections import defaultdict
 
 # Variables
-# modify these according to your system and preferences
 json_path = r'1000_clean_dataset.json'
 csv_path = r'Lexicon_small.csv'
-word_counter_size = 7 #number of digits for the wordID
-global word_counter 
-word_counter = 1
-nlp = spacy.load("en_core_web_md")
+current_ID = 1
+chunk_size = 10000 
 
-#================================================================================
-#Main
-lexicon = {}
-def json_lexicon(json_path):
-    global doc_counter
-    doc_counter = 1
+# Load SpaCy with disabled components for speed
+nlp = spacy.load("en_core_web_md", disable=['tok2vec', 'tagger', 'parser' , 'attribute_ruler', 'ner'])
+
+# Lexicon storage
+lexicon = defaultdict(lambda: [0, 0])  # Default [ID, count]
+
+# Process documents using spaCy's pipe
+def process_docs(master_strings):
+    global current_ID
+    docs = nlp.pipe(master_strings, batch_size=1000, n_process=4)
     
+    for doc in docs:
+        unique_words = {token.lemma_ for token in doc
+                        if token.text.isalnum() and not token.is_stop and token.is_oov}
 
+        for token in unique_words:
+            if lexicon[token][0] == 0:
+                lexicon[token] = [current_ID, 1]  # Assign new ID
+                current_ID += 1
+            else:
+                lexicon[token][1] += 1  # Increment count
 
-    # Load JSON file 
-
-    with open(json_path, 'r') as file:
-            objects = ijson.items(file, "item")
-            # data = json.load(file)
-            while True:
-                chunk = [obj for _, obj in zip(range(1000), objects)]  
-                if not chunk:
-                    break   
-                df = pd.DataFrame(chunk)   
-                for i,obj in df.iterrows():
-                    print(f"Processing {doc_counter}")
-                    process_doc(obj)
-                    doc_counter += 1 
-                
-
-    print("Writing to csv")
-    write_to_csv()           
-         
-
-    #Write the entire lexicon to csv
-   
-
-#================================================================================
-#Functions
-
-
-# Process a doc for the lexicon
-def process_doc(obj):
-    global word_counter 
-
-    master_string = ''
-
-    #extract title, keywords, abstract
-    master_string +=( obj['title'].strip())
-    master_string+=(' '+  obj['abstract'].strip())
-    master_string +=(' '+  list_to_string(obj['keywords']).strip())
-    if doc_counter == 833 or doc_counter == 363:
-        print(master_string)
-    
-    if not master_string: 
-        return
-    master_string = nlp(master_string.lower())
-    #lemmatize and filter words
-    unique_words = {token.lemma_ for token in master_string
-                if token.is_alpha and not token.is_stop
-                and len(token) > 2 and token.is_oov}
-    for token in unique_words:
-        if doc_counter == 363 or doc_counter==833:
-            print(token)
-        if token not in lexicon:
-            lexicon[token] = [word_counter, 1]  # Store ID and count
-            word_counter+=1
-        else:
-            lexicon[token][1] += 1  # Increment count
-
-#write the final lexicon to a .csv file
+# Write results to CSV
 def write_to_csv():
-    if lexicon:  # Proceed only if there are tokens
-        df = pd.DataFrame(lexicon.values(), columns=['wordID', 'count'], index=lexicon.keys()).reset_index()
-        df.columns = ['word', 'count', 'wordID']  # Rename columns appropriately
-        df = df[['wordID', 'word', 'count']] # Reorder columns to ID, word, count
-    if not os.path.exists(csv_path):
-        # Write with headers if the file doesn't exist
-        df.to_csv(csv_path, mode='w', index=False, header=False)
-    else:
-        # Append without headers if the file exists
-        df.to_csv(csv_path, mode='a', index=False, header=False)
-        
+    if lexicon:
+        df = pd.DataFrame.from_dict(lexicon, orient='index', columns=['wordID', 'count'])
+        df.reset_index(inplace=True)
+        df.columns = ['word', 'wordID', 'count']
+        df.to_csv(csv_path, index=False, header=False)
 
-
-# Convert a list to a string
+# Convert a list to string
 def list_to_string(lst):
     if not lst:
         return ''
     return ' '.join(str(s) for s in lst)
-    
-#Generate a wordID for a new word
-# def str_wordID():
-#     global word_counter
-#     global word_counter_size
-#     counter = word_counter
-#     numbstr = str(counter)
-#     padding = word_counter_size-len(numbstr)
-#     returnstr = '0' * padding + numbstr
-#     word_counter+=1
-#     return returnstr
 
+# Main JSON processing
+def json_lexicon(json_path):
+    with open(json_path, 'r') as file:
+        objects = ijson.items(file, "item")
+        while True:
+            chunk = [obj for _, obj in zip(range(chunk_size), objects)]
+            if not chunk:
+                break
 
+            master_strings = [' '.join([
+                obj['title'].strip(),
+                obj['abstract'].strip(),
+                list_to_string(obj['keywords']).strip()
+            ]) for obj in chunk]
+
+            # Process documents in batches using pipe
+            process_docs(master_strings)
+
+    # Write final lexicon to CSV
+    write_to_csv()
 
 # Run the script
 json_lexicon(json_path)
