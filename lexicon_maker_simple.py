@@ -5,13 +5,14 @@ import os
 from collections import defaultdict
 
 # Variables
-json_path = r'1000_clean_dataset.json'
-csv_path = r'Lexicon_small.csv'
+json_path = r'.\\Misc\\1000_clean_dataset.json'
+csv_path = r'.\\Misc\\Lexicon_small.csv'
 current_ID = 1
-chunk_size = 10000 
+chunk_size = 100
 
 # Load SpaCy with disabled components for speed
-nlp = spacy.load("en_core_web_md", disable=['tok2vec', 'tagger', 'parser' , 'attribute_ruler', 'ner'])
+print("Loading model")
+nlp = spacy.load("en_core_web_md", disable=['tok2vec', 'parser', 'ner'])
 
 # Lexicon storage
 lexicon = defaultdict(lambda: [0, 0])  # Default [ID, count]
@@ -19,11 +20,11 @@ lexicon = defaultdict(lambda: [0, 0])  # Default [ID, count]
 # Process documents using spaCy's pipe
 def process_docs(master_strings):
     global current_ID
-    docs = nlp.pipe(master_strings, batch_size=1000, n_process=4)
+    docs = nlp.pipe(master_strings, batch_size=100, n_process=1)
     
     for doc in docs:
         unique_words = {token.lemma_ for token in doc
-                        if token.text.isalnum() and not token.is_stop and token.is_oov}
+                        if token.text.isalnum() and not token.is_stop and not token.is_oov}
 
         for token in unique_words:
             if lexicon[token][0] == 0:
