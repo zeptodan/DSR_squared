@@ -1,23 +1,20 @@
 import json
 from ranking import rank_similar_words
 from utils import FAISS,lexicon,nlp,words,embeddings
-tmpDocs={}
 def search(query : str):
-    global tmpDocs
-    tmpDocs.clear()
+    words=[]
     doc = nlp(query)  # renamed from 'words' to 'doc'
     for token in doc:  # iterate over spaCy tokens
         wordlemma = token.lemma_
         if wordlemma in lexicon:
-            load_and_rank(wordlemma)
-            
+            words.append(wordlemma)
+    tmpDocs=load_and_rank(words)  
     resultantDocs=[[key,value] for key,value in tmpDocs.items()]
     resultantDocs.sort(key=lambda x:x[1],reverse=True)
     return resultantDocs
         
 
 def load_and_rank(wordtoLoad):
-    global tmpDocs
     words_to_doc={}
     barrels={}
     newWords=find_matches(wordtoLoad,5)   
@@ -29,7 +26,7 @@ def load_and_rank(wordtoLoad):
     for barrel,wordstoLoad in barrels.items():
         load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
     
-    rank_similar_words(words_to_doc,newWords,lexicon, 4040997,tmpDocs)
+    return rank_similar_words(words_to_doc,newWords,lexicon, 4040997)
         
 def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
     file=open("barrels/barrel-" + barrel + ".json")
