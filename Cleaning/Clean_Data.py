@@ -17,7 +17,7 @@ def clean_DataChuncks(df):
 
     count_records=len(df)    
     df = df.to_dict('records')
-    append_to_json('nice.json',df)
+    append_to_json('TheCleanData2.0.json',df)
     return count_records
 # storing the clean dara
 def append_to_json(file_path, new_record):
@@ -55,13 +55,13 @@ def append_to_json(file_path, new_record):
     else:
         # Append without headers if the file exists
         df.to_csv(csv_path, mode='a', index=False, header=False)
-file_path = r"TheCleanData2.0.json"
+file_path = r"TheCleanData.json"
 with open(file_path, "r") as file:
     count=0
     objects = ijson.items(file, "item")
     # go through the data in form of chunks without loading the whole file
-    for i in range(1):
-        chunk = [obj for _, obj in zip(range(1000), objects)]  
+    while(True):
+        chunk = [obj for _, obj in zip(range(20000), objects)]  
         if not chunk:
             break   
         df = pd.DataFrame(chunk)   
