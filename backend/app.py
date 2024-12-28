@@ -53,6 +53,11 @@ def search_endpoint():
     }
     
     return jsonify(response)
+@app.route('/add-paper', methods=['POST'])
+def add_paper():
+    data=request.json
+    print(data)
+    return jsonify({'message':'Paper added Successfully'}),200
 
 def getDocs(docs_to_load,page):
     stack = []

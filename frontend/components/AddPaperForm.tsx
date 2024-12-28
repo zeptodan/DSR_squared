@@ -19,11 +19,24 @@ export default function AddPaperForm({ onClose }: AddPaperFormProps) {
   const [citations, setCitations] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
-    console.log({ title, keywords, abstract, authors, date, citations, url })
-    onClose()
+    const paperData = { title, keywords, abstract, authors, date, citations, url }
+    
+    try {
+      const response = await fetch('http://localhost:8000/add-paper', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paperData),
+      })
+      const result = await response.json()
+      console.log(result)
+      onClose()
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   return (
@@ -118,4 +131,3 @@ export default function AddPaperForm({ onClose }: AddPaperFormProps) {
     </div>
   )
 }
-
