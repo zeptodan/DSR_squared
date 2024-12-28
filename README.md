@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/images/banner.svg" alt="NexSearch Banner" width="100%">
+  <img src="https://github.com/zeptodan/DSR_squared/blob/main/Assets/Banner.png" alt="DSR² Banner" width="100%" height = auto>
 </p>
 
 # DSR²
