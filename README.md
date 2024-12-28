@@ -8,7 +8,7 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg?style=flat-square)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square)
 
-NexSearch is a modern, high-performance search engine built with scalability and accuracy in mind.
+DSR² is a modern, high-performance search engine built with scalability and accuracy in mind.
 
 ## ✨ Features
 
@@ -40,7 +40,7 @@ NexSearch is a modern, high-performance search engine built with scalability and
 
 1. Clone the repository:
    \`\`\`bash
-   git clone https://github.com/yourusername/nexsearch.git
+   git clone https://github.com/zeptodan/DSR_squared.git
    \`\`\`
 
 2. Navigate to the project directory:
