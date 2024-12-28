@@ -8,8 +8,8 @@ from tqdm import tqdm
 
 
 # Variables
-json_path = r'.\\Misc\\1000_clean_dataset.json'
-csv_path = r'.\\Misc\\Lexicon_small.csv'
+json_path = r'TheCleanData2.0.json'
+csv_path = r'Lexicon_1m.csv'
 current_ID = 1
 chunk_size = 1000
 
@@ -55,9 +55,9 @@ def json_lexicon(json_path):
     with open(json_path, 'r') as file:
         objects = ijson.items(file, "item")
 
-        pbar = tqdm(total=3842149, desc='Processing docs: ')
+        pbar = tqdm(total=1000000, desc='Processing docs: ')
 
-        while True:
+        for i in range(1000):
             chunk = [obj for _, obj in zip(range(chunk_size), objects)]
             if not chunk:
                 break
