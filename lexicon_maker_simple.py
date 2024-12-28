@@ -1,14 +1,17 @@
 import pandas as pd
 import spacy
 import ijson
-import os
 from collections import defaultdict
+from tqdm import tqdm
+
+
+
 
 # Variables
 json_path = r'.\\Misc\\1000_clean_dataset.json'
 csv_path = r'.\\Misc\\Lexicon_small.csv'
 current_ID = 1
-chunk_size = 100
+chunk_size = 1000
 
 # Load SpaCy with disabled components for speed
 print("Loading model")
@@ -20,7 +23,7 @@ lexicon = defaultdict(lambda: [0, 0])  # Default [ID, count]
 # Process documents using spaCy's pipe
 def process_docs(master_strings):
     global current_ID
-    docs = nlp.pipe(master_strings, batch_size=100, n_process=1)
+    docs = nlp.pipe(master_strings, batch_size=200, n_process=1)
     
     for doc in docs:
         unique_words = {token.lemma_ for token in doc
@@ -51,6 +54,9 @@ def list_to_string(lst):
 def json_lexicon(json_path):
     with open(json_path, 'r') as file:
         objects = ijson.items(file, "item")
+
+        pbar = tqdm(total=3842149, desc='Processing docs: ')
+
         while True:
             chunk = [obj for _, obj in zip(range(chunk_size), objects)]
             if not chunk:
@@ -64,6 +70,8 @@ def json_lexicon(json_path):
 
             # Process documents in batches using pipe
             process_docs(master_strings)
+            del(master_strings)
+            pbar.update(chunk_size)
 
     # Write final lexicon to CSV
     write_to_csv()
