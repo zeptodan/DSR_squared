@@ -54,7 +54,7 @@ def json_lexicon(json_path):
         pbar = tqdm(total=1000000, desc='Processing docs: ')
         doc_counter = chunk_size
 
-        while True:
+        while(True):
             chunk = [obj for _, obj in zip(range(chunk_size), objects)]
             if not chunk:
                 break
