@@ -3,7 +3,7 @@ import os
 from utils import nlp,lexicon
 from Inverted_Index import calculate_weight
 def docAdd(doc):
-    file = open("TheCleanData2.0.json","a")
+    file = open("nice.json","r+")
     file.seek(0, os.SEEK_END)  # Move to the end of the file
     file.seek(file.tell() - 1, os.SEEK_SET)  # Move back 1 character to overwrite the closing bracket "]"
     file.write(",")
@@ -46,7 +46,7 @@ def docAdd(doc):
             elif wordlemma in lexicon:
                 document_index[wordlemma][1]+=1
     document_index["L"]=count
-    document_index["cite"]=doc["n_citation"]
+    document_index["cite"]=int(doc["citations"])
     
     
     
