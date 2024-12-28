@@ -4,6 +4,7 @@ from flask_cors import CORS
 from documentRetrieval import search
 import json
 import time
+from documentAddition import docAdd
 previous_query=None
 docs_to_load=None
 total_results=None
@@ -56,6 +57,7 @@ def search_endpoint():
 @app.route('/add-paper', methods=['POST'])
 def add_paper():
     data=request.json
+    docAdd(data)
     print(data)
     return jsonify({'message':'Paper added Successfully'}),200
 
