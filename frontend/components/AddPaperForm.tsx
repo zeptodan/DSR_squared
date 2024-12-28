@@ -14,14 +14,44 @@ export default function AddPaperForm({ onClose }: AddPaperFormProps) {
   const [title, setTitle] = useState('')
   const [keywords, setKeywords] = useState('')
   const [abstract, setAbstract] = useState('')
-  const [authors, setAuthors] = useState('')
+  const [authors, setAuthors] = useState([''])
   const [date, setDate] = useState('')
   const [citations, setCitations] = useState('')
   const [url, setUrl] = useState('')
 
+  const handleAuthorChange = (index: number, value: string) => {
+    const newAuthors = [...authors]
+    newAuthors[index] = value
+    setAuthors(newAuthors)
+  }
+
+  const handleAddAuthor = () => {
+    setAuthors([...authors, ''])
+  }
+
+  const handleRemoveAuthor = (index: number) => {
+    if (authors.length > 1) {
+      const newAuthors = authors.filter((_, i) => i !== index)
+      setAuthors(newAuthors)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const paperData = { title, keywords, abstract, authors, date, citations, url }
+
+    // Validation
+    if (authors.length === 0 || authors.some(author => author.trim() === '')) {
+      alert('The paper must have at least one author.')
+      return
+    }
+
+    if (abstract.split(' ').length < 10) {
+      alert('The abstract should be at least 10 words.')
+      return
+    }
+
+    const year = new Date(date).getFullYear()
+    const paperData = { title, keywords, abstract, authors, year, citations, url }
     
     try {
       const response = await fetch('http://localhost:8000/add-paper', {
@@ -87,13 +117,33 @@ export default function AddPaperForm({ onClose }: AddPaperFormProps) {
             />
           </div>
           <div>
-            <label htmlFor="authors" className="block text-sm font-medium mb-1">Authors</label>
-            <Input
-              id="authors"
-              value={authors}
-              onChange={(e) => setAuthors(e.target.value)}
-              className="w-full bg-white/10 border-white/20"
-            />
+            <label className="block text-sm font-medium mb-1">Authors</label>
+            {authors.map((author, index) => (
+              <div key={index} className="flex items-center space-x-2 mb-2">
+                <Input
+                  value={author}
+                  onChange={(e) => handleAuthorChange(index, e.target.value)}
+                  className="w-full bg-white/10 border-white/20"
+                />
+                {authors.length > 1 && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleRemoveAuthor(index)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={handleAddAuthor}
+              className="w-full bg-blue-500 text-white hover:bg-blue-700 mt-2"
+            >
+              Add Author
+            </Button>
           </div>
           <div>
             <label htmlFor="date" className="block text-sm font-medium mb-1">Date</label>
@@ -125,7 +175,12 @@ export default function AddPaperForm({ onClose }: AddPaperFormProps) {
               className="w-full bg-white/10 border-white/20"
             />
           </div>
-          <Button type="submit" className="w-full">Add Paper</Button>
+          <Button
+            type="submit"
+            className="w-full bg-blue-500 text-white hover:bg-blue-700 mt-4"
+          >
+            Add Paper
+          </Button>
         </form>
       </div>
     </div>
