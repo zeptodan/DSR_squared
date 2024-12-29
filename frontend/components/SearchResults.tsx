@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   const [totalResults, setTotalResults] = useState(0);
   const [searchTime, setSearchTime] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const isFetching = useRef(false);
   const _resultsPerPage = 10;
 
   console.log('Initial state:', {
@@ -40,11 +40,12 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   });
 
   const fetchResults = useCallback(async (page: number) => {
-    if (isFetching) return; // Prevent multiple fetch requests
-    setIsFetching(true);
+    if (isFetching.current) return; // Prevent multiple fetch requests
+    isFetching.current = true;
     setError(null);
     try {
-      console.log('trying')
+      console.log('Fetching results for query:', query, 'page:', page);
+
       const response = await fetch(
         `http://localhost:8000/search?query=${encodeURIComponent(query)}&page=${page}`
       );
@@ -62,9 +63,9 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
       setError('An error occurred while fetching results. Please try again.');
       console.error(err);
     } finally {
-      setIsFetching(false);
+      isFetching.current = false;
     }
-  }, [query, isFetching]);
+  }, [query]);
 
   useEffect(() => {
     if (query) {
