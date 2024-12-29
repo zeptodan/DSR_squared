@@ -37,7 +37,7 @@ def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
         words_to_doc[word] = data[lexicon[word]["id"]]
     
     
-def find_matches(query_words, k, list_of_all_words):
+def find_matches(query_words, k):
     embeddings - []
     for word in query_words:
         wordID = lexicon[word]['id']
@@ -49,6 +49,6 @@ def find_matches(query_words, k, list_of_all_words):
 
     for matches_indices, matches_distances in zip(whole_distances, whole_indices):
         for ID, distance in zip(matches_indices, matches_distances):
-            matches[list_of_all_words[ID]] = distance
+            matches[words[ID]] = distance
     print(matches)
     return matches
