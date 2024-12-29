@@ -44,8 +44,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
     setIsFetching(true);
     setError(null);
     try {
-      console.log('Fetching results for query:', query, 'page:', page);
-
+      console.log('trying')
       const response = await fetch(
         `http://localhost:8000/search?query=${encodeURIComponent(query)}&page=${page}`
       );

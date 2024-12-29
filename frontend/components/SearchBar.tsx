@@ -20,6 +20,7 @@ export default function SearchBar({ onSearch, initialQuery }: SearchBarProps) {
   }, [initialQuery])
 
   const handleSearch = (e: React.FormEvent) => {
+    console.log("Search is pressed")
     e.preventDefault()
     console.log('handleSearch called with query:', query)
     onSearch(query)
