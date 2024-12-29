@@ -86,6 +86,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
