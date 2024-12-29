@@ -18,6 +18,15 @@ export default function Home() {
   const [showAddPaper, setShowAddPaper] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
 
+  console.log('Initial state:', {
+    query,
+    searchKey,
+    isScrolled,
+    isTwoColumns,
+    sortBy,
+    showAddPaper,
+  })
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100)
@@ -28,6 +37,7 @@ export default function Home() {
   }, [])
 
   const handleSearch = useCallback((newQuery: string) => {
+    console.log('handleSearch called with newQuery:', newQuery)
     setQuery(newQuery)
     setSearchKey(prevKey => prevKey + 1) // Force a new search
     if (mainRef.current) {
