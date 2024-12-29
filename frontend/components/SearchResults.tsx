@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface SearchResult {
   id: number;
@@ -149,6 +149,16 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
         <Button
           variant="outline"
           size="icon"
+          onClick={() => handlePageChange(1)}
+          disabled={currentPage === 1}
+          className={buttonClasses}
+          title="First page"
+        >
+          <ChevronsLeft className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           className={buttonClasses}
@@ -180,6 +190,16 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
           title="Next page"
         >
           <ChevronRight className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => handlePageChange(totalPages)}
+          disabled={currentPage === totalPages}
+          className={buttonClasses}
+          title="Last page"
+        >
+          <ChevronsRight className="h-4 w-4" />
         </Button>
       </div>
     </div>
