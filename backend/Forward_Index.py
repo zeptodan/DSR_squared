@@ -7,7 +7,7 @@ lexi = pd.read_csv("LexiconFull.csv", names=["count", "word", "id","cluster"], k
 lexicon=lexi.set_index("word").to_dict(orient="index")
 #open dataset file and file to write in
 file=open("TheCleanData3.0.json","r")
-writefile=open("Forward_index.json","w")
+writefile=open("Forward_index_third.json","w")
 documents=ijson.items(file,"item")
 nlp = spacy.load("en_core_web_md")
 document_index={}
