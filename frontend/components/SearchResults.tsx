@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface SearchResult {
   id: number;
@@ -19,6 +19,14 @@ interface SearchResultsProps {
   isTwoColumns: boolean;
   sortBy: string;
 }
+
+const highlightText = (text: string, query: string) => {
+  if (!query) return text;
+  const regex = new RegExp(`(${query.split(' ').join('|')})`, 'gi');
+  return text.split(regex).map((part, index) => 
+    regex.test(part) ? <strong key={index}>{part}</strong> : part
+  );
+};
 
 export default function SearchResults({ query, isTwoColumns, sortBy }: SearchResultsProps) {
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -78,8 +86,25 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  const getPaginationRange = (current: number, total: number, max: number = 5) => {
+    if (total <= max) return Array.from({ length: total }, (_, i) => i + 1);
+
+    let start = Math.max(current - Math.floor(max / 2), 1);
+    let end = start + max - 1;
+
+    if (end > total) {
+      end = total;
+      start = Math.max(end - max + 1, 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+
+  const paginationRange = getPaginationRange(currentPage, totalPages);
 
   if (!query) return null;
 
@@ -107,13 +132,13 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
                 className="text-white group-hover:text-blue-500 transition-colors"
               >
                 <span className="bg-left-bottom bg-gradient-to-r from-blue-500 to-blue-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-300 ease-out">
-                  {result.title}
+                  {highlightText(result.title, query)}
                 </span>
               </a>
             </h2>
-            <p className="text-gray-300 mb-4">{result.description}</p>
+            <p className="text-gray-300 mb-4 line-clamp-3">{highlightText(result.description, query)}</p>
             <div className="flex flex-wrap gap-4 text-sm text-gray-400">
-              <div>Authors: {result.authors.join(', ')}</div>
+              <div>Authors: {highlightText(result.authors.join(', '), query)}</div>
               <div>Published: {result.date}</div>
               <div>Citations: {result.citations}</div>
             </div>
@@ -124,13 +149,24 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
         <Button
           variant="outline"
           size="icon"
+          onClick={() => handlePageChange(1)}
+          disabled={currentPage === 1}
+          className={buttonClasses}
+          title="First page"
+        >
+          <ChevronsLeft className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           className={buttonClasses}
+          title="Previous page"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {paginationRange.map((page) => (
           <Button
             key={page}
             variant={page === currentPage ? 'default' : 'outline'}
@@ -140,6 +176,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
                 ? 'bg-blue-500 text-white border-2 border-blue-500'
                 : buttonClasses
             }`}
+            title={`Go to page ${page}`}
           >
             {page}
           </Button>
@@ -150,8 +187,19 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           className={buttonClasses}
+          title="Next page"
         >
           <ChevronRight className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => handlePageChange(totalPages)}
+          disabled={currentPage === totalPages}
+          className={buttonClasses}
+          title="Last page"
+        >
+          <ChevronsRight className="h-4 w-4" />
         </Button>
       </div>
     </div>

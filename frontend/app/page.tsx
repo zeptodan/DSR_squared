@@ -1,16 +1,17 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import SearchBar from '@/components/SearchBar'
 import SearchResults from '@/components/SearchResults'
 import ScrollToTop from '@/components/ScrollToTop'
 import { Button } from '@/components/ui/button'
-import { LayoutGrid, LayoutList, ArrowDownAZ, Calendar, FileText, QuoteIcon as Citation } from 'lucide-react'
+import { LayoutGrid, LayoutList, ArrowDownAZ, Calendar, FileText, QuoteIcon as Citation, PlusCircle } from 'lucide-react'
 import { logoFont } from '@/styles/fonts'
 import AddPaperForm from '@/components/AddPaperForm'
 
 export default function Home() {
   const [query, setQuery] = useState('')
+  const [searchKey, setSearchKey] = useState(0)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isTwoColumns, setIsTwoColumns] = useState(false)
   const [sortBy, setSortBy] = useState('relevance')
@@ -26,12 +27,13 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleSearch = (newQuery: string) => {
+  const handleSearch = useCallback((newQuery: string) => {
     setQuery(newQuery)
+    setSearchKey(prevKey => prevKey + 1) // Force a new search
     if (mainRef.current) {
       mainRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }
+  }, [])
 
   const buttonClasses = "bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50"
 
@@ -54,6 +56,19 @@ export default function Home() {
               DSR<span className="text-blue-500">²</span>
             </h1>
             <SearchBar onSearch={handleSearch} initialQuery={query} />
+            {!query && (
+              <div className="mt-4 flex justify-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setShowAddPaper(true)}
+                  className="rounded-full px-6 py-2 text-sm font-medium bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors border-2 border-white/50 whitespace-nowrap"
+                >
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Add new paper
+                </Button>
+              </div>
+            )}
           </div>
         )}
         {query && (
@@ -65,6 +80,7 @@ export default function Home() {
                   size="icon"
                   onClick={() => setSortBy(sortBy === 'relevance' ? 'date' : sortBy === 'date' ? 'citations' : 'relevance')}
                   className={buttonClasses}
+                  title={`Ordered by ${sortBy}`}
                 >
                   {sortBy === 'relevance' ? <ArrowDownAZ className="h-4 w-4" /> : 
                    sortBy === 'date' ? <Calendar className="h-4 w-4" /> :
@@ -75,6 +91,7 @@ export default function Home() {
                   size="icon"
                   onClick={() => setShowAddPaper(true)}
                   className={buttonClasses}
+                  title="Add new paper"
                 >
                   <FileText className="h-4 w-4" />
                 </Button>
@@ -85,6 +102,7 @@ export default function Home() {
                   size="icon"
                   onClick={() => setIsTwoColumns(false)}
                   className={`${buttonClasses} ${!isTwoColumns ? 'bg-blue-500 text-white' : ''}`}
+                  title="Single column view"
                 >
                   <LayoutList className="h-4 w-4" />
                 </Button>
@@ -93,12 +111,13 @@ export default function Home() {
                   size="icon"
                   onClick={() => setIsTwoColumns(true)}
                   className={`${buttonClasses} ${isTwoColumns ? 'bg-blue-500 text-white' : ''}`}
+                  title="Two column view"
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            <SearchResults query={query} isTwoColumns={isTwoColumns} sortBy={sortBy} />
+            <SearchResults key={searchKey} query={query} isTwoColumns={isTwoColumns} sortBy={sortBy} />
           </div>
         )}
       </div>

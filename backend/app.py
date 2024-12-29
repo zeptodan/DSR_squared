@@ -84,5 +84,4 @@ def getDocs(docs_to_load,page):
     return docs
 
 if __name__ == '__main__':
-    print('Ali')
     app.run(debug=True, port=8000)
