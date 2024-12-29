@@ -25,30 +25,34 @@ def load_and_rank(wordtoLoad):
             barrels[barrel]=[]
         barrels[barrel].append(newWord)
     for barrel,wordstoLoad in barrels.items():
-        load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
+        print("----------------------------man-------------------------------------")
+        print(barrel)
+        if barrel:
+            load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
     tmpDocs={}
     rank_similar_words(words_to_doc,newWords,lexicon, 4040997,tmpDocs)
     return tmpDocs
         
 def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
-    file=open("barrels/barrel-" + barrel + ".json")
+    file=open("D:\\DSR_squared\\backend\\barrels\\barrel-" + barrel + ".json")
     data=json.load(file)
     for word in wordstoLoad:
         words_to_doc[word] = data[lexicon[word]["id"]]
     
     
 def find_matches(query_words, k):
-    embeddings - []
+    matches = {}
+    currentEmbedding=[]
     for word in query_words:
+        matches[word]=1
         wordID = lexicon[word]['id']
         word_embedding = embeddings[int(wordID)-1].reshape(1, -1)
-        embeddings.append(word_embedding)
+        currentEmbedding.append(word_embedding)
+    query_embeddings = np.vstack(currentEmbedding)
+    whole_distances, whole_indices = FAISS.search(query_embeddings, k)
 
-    whole_distances, whole_indices = FAISS.search(embeddings, k)
-    matches = {}
-
-    for matches_indices, matches_distances in zip(whole_distances, whole_indices):
+    for matches_distances, matches_indices in zip(whole_distances, whole_indices):
         for ID, distance in zip(matches_indices, matches_distances):
-            matches[words[ID]] = distance
+            matches[words[str(ID)]["word"]] = distance
     print(matches)
     return matches

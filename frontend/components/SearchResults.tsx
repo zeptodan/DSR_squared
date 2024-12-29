@@ -40,6 +40,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   const fetchResults = useCallback(async (page: number) => {
     setError(null);
     try {
+      console.log('trying')
       const response = await fetch(
         `http://localhost:8000/search?query=${encodeURIComponent(query)}&page=${page}`
       );

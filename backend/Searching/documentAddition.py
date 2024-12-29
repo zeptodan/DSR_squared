@@ -1,7 +1,10 @@
 import json
 import os
 from utils import nlp,lexicon
-from Indexing.Inverted_Index import calculate_weight
+def calculate_weight(value,length):
+    temp=round((value[0]+value[1]+value[2])/length,8)
+    return str(temp)
+    
 def docAdd(doc):
     file = open("nice.json","r+")
     file.seek(0, os.SEEK_END)  # Move to the end of the file
