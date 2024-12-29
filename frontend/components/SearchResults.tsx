@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface SearchResult {
   id: number;
@@ -98,10 +98,24 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
     }
   };
 
+  const highlightText = (text: string, highlight: string) => {
+    if (!highlight.trim()) {
+      return text;
+    }
+    const regex = new RegExp(`(${highlight})`, 'gi');
+    return text.split(regex).map((part, index) =>
+      regex.test(part) ? <span key={index} className="bg-yellow-300">{part}</span> : part
+    );
+  };
+
   if (!query) return null;
 
   const buttonClasses =
     'bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50';
+
+  const startPage = Math.max(1, currentPage - 2);
+  const endPage = Math.min(totalPages, currentPage + 2);
+  const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   return (
     <div>
@@ -124,11 +138,11 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
                 className="text-white group-hover:text-blue-500 transition-colors"
               >
                 <span className="bg-left-bottom bg-gradient-to-r from-blue-500 to-blue-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-300 ease-out">
-                  {result.title}
+                  {highlightText(result.title, query)}
                 </span>
               </a>
             </h2>
-            <p className="text-gray-300 mb-4">{result.description}</p>
+            <p className="text-gray-300 mb-4 line-clamp-3">{highlightText(result.description, query)}</p>
             <div className="flex flex-wrap gap-4 text-sm text-gray-400">
               <div>Authors: {result.authors.join(', ')}</div>
               <div>Published: {result.date}</div>
@@ -141,13 +155,22 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
         <Button
           variant="outline"
           size="icon"
+          onClick={() => handlePageChange(1)}
+          disabled={currentPage === 1}
+          className={buttonClasses}
+        >
+          <ChevronsLeft className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           className={buttonClasses}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {pages.map((page) => (
           <Button
             key={page}
             variant={page === currentPage ? 'default' : 'outline'}
@@ -169,6 +192,15 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
           className={buttonClasses}
         >
           <ChevronRight className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => handlePageChange(totalPages)}
+          disabled={currentPage === totalPages}
+          className={buttonClasses}
+        >
+          <ChevronsRight className="h-4 w-4" />
         </Button>
       </div>
     </div>
