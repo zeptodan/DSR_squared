@@ -1,122 +1,85 @@
-'''
-Takes the dataset and generates a lexicon for each word
-wordID, word, doc-count
-'''
+#import os
 import pandas as pd
-import spacy
 import ijson
-import os
-
-
-
+from tqdm.notebook import tqdm
+import spacy
+from collections import defaultdict
 
 # Variables
-# modify these according to your system and preferences
-json_path = r'1000_clean_dataset.json'
-csv_path = r'Lexicon_small.csv'
-word_counter_size = 7 #number of digits for the wordID
-global word_counter 
-word_counter = 1
-nlp = spacy.load("en_core_web_md")
+json_path = r'/content/drive/MyDrive/DSRsquared/Clean_Dataset_Large.json'
+csv_path = r'LexiconFull.csv'
+chunk_size = 10000
 
-#================================================================================
-#Main
-lexicon = {}
+
+# Load SpaCy with disabled components for speed
+print("Loading model")
+nlp = spacy.load("en_core_web_md", disable=['tok2vec', 'parser', 'ner'])
+
+lexicon = defaultdict(lambda: [0, 0])  # Default [ID, count]
+current_ID = 1
+
+# Process documents using spaCy's pipe
+def process_docs(master_strings):
+    global current_ID, lexicon
+    docs = nlp.pipe(master_strings, batch_size=200, n_process=1)
+    for doc in docs:
+        unique_words = set(token.lemma_ for token in doc
+                        if token.text.isalnum() and not token.is_stop
+                           and not token.is_oov)
+
+        for word in unique_words:
+            if lexicon[word][0] == 0:
+                lexicon[word] = [current_ID, 1]  # Assign new ID
+                current_ID += 1
+            else:
+                lexicon[word][1] += 1  # Increment count
+
+# Write results to CSV
+def write_to_csv(lexicon):
+    if lexicon:
+        df = pd.DataFrame.from_dict(lexicon, orient='index', columns=['wordID', 'count'])
+        df.reset_index(inplace=True)
+        df.columns = ['word', 'wordID', 'count']
+        df.to_csv(csv_path, index=False, header=False)
+
+# Convert list or set to string
+def to_string(iterable):
+    return ' '.join(str(s) for s in iterable) if iterable else ''
+
+# Process JSON and build lexicon
 def json_lexicon(json_path):
-    global doc_counter
-    doc_counter = 1
-    
-
-
-    # Load JSON file 
-
-    with open(json_path, 'r') as file:
+        with open(json_path, 'r') as file:
             objects = ijson.items(file, "item")
-            # data = json.load(file)
+            pbar = tqdm(total=1000000, desc='Processing docs: ')
+            doc_counter = chunk_size
+
             while True:
-                chunk = [obj for _, obj in zip(range(1000), objects)]  
+                chunk = [obj for _, obj in zip(range(chunk_size), objects)]
                 if not chunk:
-                    break   
-                df = pd.DataFrame(chunk)   
-                for i,obj in df.iterrows():
-                    print(f"Processing {doc_counter}")
-                    process_doc(obj)
-                    doc_counter += 1 
-                
+                    break
+                elif doc_counter >=1000000:
+                    break
 
-    print("Writing to csv")
-    write_to_csv()           
-         
+                # Prepare strings
+                master_strings = [' '.join([
+                obj['title'].strip(),
+                obj['abstract'].strip(),
+                to_string(obj['keywords']).strip()
+                ]) for obj in chunk]
+                del chunk
 
-    #Write the entire lexicon to csv
-   
+                # Process documents
+                process_docs(master_strings)
+                doc_counter += chunk_size
+                # Cleanup
+                del master_strings
+                pbar.update(chunk_size)
 
-#================================================================================
-#Functions
+            pbar.close()
 
+        # Write final lexicon
+        write_to_csv(lexicon)
 
-# Process a doc for the lexicon
-def process_doc(obj):
-    global word_counter 
+if __name__ == "__main__":
+    json_lexicon(json_path)
 
-    master_string = ''
-
-    #extract title, keywords, abstract
-    master_string +=( obj['title'].strip())
-    master_string+=(' '+  obj['abstract'].strip())
-    master_string +=(' '+  list_to_string(obj['keywords']).strip())
-    if doc_counter == 833 or doc_counter == 363:
-        print(master_string)
-    
-    if not master_string: 
-        return
-    master_string = nlp(master_string.lower())
-    #lemmatize and filter words
-    unique_words = {token.lemma_ for token in master_string
-                if token.is_alpha and not token.is_stop
-                and len(token) > 2 and token.is_oov}
-    for token in unique_words:
-        if doc_counter == 363 or doc_counter==833:
-            print(token)
-        if token not in lexicon:
-            lexicon[token] = [word_counter, 1]  # Store ID and count
-            word_counter+=1
-        else:
-            lexicon[token][1] += 1  # Increment count
-
-#write the final lexicon to a .csv file
-def write_to_csv():
-    if lexicon:  # Proceed only if there are tokens
-        df = pd.DataFrame(lexicon.values(), columns=['wordID', 'count'], index=lexicon.keys()).reset_index()
-        df.columns = ['word', 'count', 'wordID']  # Rename columns appropriately
-        df = df[['wordID', 'word', 'count']] # Reorder columns to ID, word, count
-    if not os.path.exists(csv_path):
-        # Write with headers if the file doesn't exist
-        df.to_csv(csv_path, mode='w', index=False, header=False)
-    else:
-        # Append without headers if the file exists
-        df.to_csv(csv_path, mode='a', index=False, header=False)
-        
-
-
-# Convert a list to a string
-def list_to_string(lst):
-    if not lst:
-        return ''
-    return ' '.join(str(s) for s in lst)
-    
-#Generate a wordID for a new word
-# def str_wordID():
-#     global word_counter
-#     global word_counter_size
-#     counter = word_counter
-#     numbstr = str(counter)
-#     padding = word_counter_size-len(numbstr)
-#     returnstr = '0' * padding + numbstr
-#     word_counter+=1
-#     return returnstr
-
-
-
-# Run the script
-json_lexicon(json_path)
