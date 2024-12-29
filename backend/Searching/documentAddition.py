@@ -1,7 +1,7 @@
 import json
 import os
 from utils import nlp,lexicon
-from Inverted_Index import calculate_weight
+from Indexing.Inverted_Index import calculate_weight
 def docAdd(doc):
     file = open("nice.json","r+")
     file.seek(0, os.SEEK_END)  # Move to the end of the file
