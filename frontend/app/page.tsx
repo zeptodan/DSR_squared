@@ -18,6 +18,15 @@ export default function Home() {
   const [showAddPaper, setShowAddPaper] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
 
+  console.log('Initial state:', {
+    query,
+    searchKey,
+    isScrolled,
+    isTwoColumns,
+    sortBy,
+    showAddPaper,
+  })
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100)
@@ -27,13 +36,13 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleSearch = useCallback((newQuery: string) => {
+   const handleSearch = (newQuery: string) => {
     setQuery(newQuery)
     setSearchKey(prevKey => prevKey + 1) // Force a new search
     if (mainRef.current) {
       mainRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [])
+  }
 
   const buttonClasses = "bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50"
 
@@ -126,4 +135,3 @@ export default function Home() {
     </main>
   )
 }
-

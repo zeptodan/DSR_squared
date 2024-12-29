@@ -11,12 +11,18 @@ interface SearchBarProps {
 export default function SearchBar({ onSearch, initialQuery }: SearchBarProps) {
   const [query, setQuery] = useState(initialQuery)
 
+  console.log('Initial state:', {
+    query,
+  })
+
   useEffect(() => {
     setQuery(initialQuery)
   }, [initialQuery])
 
   const handleSearch = (e: React.FormEvent) => {
+    console.log("Search is pressed")
     e.preventDefault()
+    console.log('handleSearch called with query:', query)
     onSearch(query)
   }
 
@@ -38,4 +44,3 @@ export default function SearchBar({ onSearch, initialQuery }: SearchBarProps) {
     </form>
   )
 }
-
