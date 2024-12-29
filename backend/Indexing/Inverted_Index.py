@@ -2,7 +2,8 @@ import ijson
 import json
 #function to give score to words in the document based on its importance
 def calculate_weight(value,length):
-    return str((value[0]+value[1]+value[2])/length)
+    temp=round((value[0]+value[1]+value[2])/length,8)
+    return str(temp)
     
 offsets=open("offsets.csv","r")
 offsetlist=offsets.readlines()

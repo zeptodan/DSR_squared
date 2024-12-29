@@ -3,12 +3,10 @@ import json
 import csv
 import ijson
 from decimal import Decimal
-def decimal_serializer(obj):
-    if isinstance(obj, Decimal):
-        return float(obj)
+
 lexi = pd.read_csv("Lexicon_1_Mill.csv", names=["word", "id", "count"], keep_default_na=False, na_values=[])
 lexicon=lexi.set_index("id").to_dict(orient="index")
-file1=open("inverted_index_third.json","r")
+file1=open("Inverted_index.json","r")
 i=0
 count=0
 path=r"backend/barrels/barrel-"
@@ -20,7 +18,7 @@ for key,value in  ijson.kvitems(file1, ''):
     if count ==20:
         i+=1
         count=0
-        json.dump(cluster,file,separators=[',',':'],default=decimal_serializer)
+        json.dump(cluster,file,separators=[',',':'])
         cluster.clear()
         file.close()
         file=open(path+str(i) + ".json","w")
