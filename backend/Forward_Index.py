@@ -3,10 +3,10 @@ import ijson
 import spacy
 import json
 #load lexicon as dictionary
-lexi = pd.read_csv("lexi_clusters.csv", names=["count", "word", "id","cluster"], keep_default_na=False, na_values=[])
+lexi = pd.read_csv("LexiconFull.csv", names=["count", "word", "id","cluster"], keep_default_na=False, na_values=[])
 lexicon=lexi.set_index("word").to_dict(orient="index")
 #open dataset file and file to write in
-file=open("1000_clean_dataset.json","r")
+file=open("TheCleanData3.0.json","r")
 writefile=open("Forward_index.json","w")
 documents=ijson.items(file,"item")
 nlp = spacy.load("en_core_web_md")
@@ -16,7 +16,10 @@ count=0
 writefile.write("[")
 #iterate over each document in dataset
 for document in documents:
-    print("processing " + str(i))
+    if i==1000000:
+        break
+    if i%1000==0:
+        print("Processed ",i)
     count=0
     if i!=1:
         writefile.write(",")
