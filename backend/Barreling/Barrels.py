@@ -8,9 +8,9 @@ import gc
 
 
 #FILENAMES
-lexi = "LexiconFinal.csv"
+lexi = "Lexicon_1_Mill.csv"
 spacy_model = "en_core_web_md"
-new_lexi = "Clusters.csv"
+new_lexi = "Lexicon_1_Mill_Clusters.csv"
 
 ########################################################
 print("Loading model")
@@ -18,7 +18,7 @@ nlp = spacy.load(spacy_model)
 print("Loaded model\n")
 
 print("Loading lexicon")
-Lexicon = pandas.read_csv(lexi, usecols=[1, 2])
+Lexicon = pandas.read_csv(lexi)
 print("Loaded lexicon\n")
 
 print("Extracting words")
@@ -60,4 +60,4 @@ clusters = algo.fit_predict(embeddings)
 #Append the cluster labels to the lexicon
 print("Writing to file")
 Lexicon['Clusters'] = clusters
-Lexicon.to_csv(new_lexi, header = ['Words', 'ID', 'Clusters'], index=False)
+Lexicon.to_csv(new_lexi, header = ['Words', 'ID','count', 'Clusters'], index=False)

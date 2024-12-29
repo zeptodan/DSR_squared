@@ -44,3 +44,8 @@ resources.py
 semantic/
 Forward_index_third.json
 Lexicon_3m.csv
+Lexicon_1_Mill.csv
+Forward_index_test.json
+Inverted_index_third.json
+Lexicon_1_Reordered.csv
+Lexicon_1_Barrels.csv
