@@ -12,17 +12,14 @@ app = Flask(__name__)
 CORS(app)
 @app.route('/search', methods=['GET'])
 def search_endpoint():
-    print("--------------------------------A request is recieved_----------------------------------------------------")
     global previous_query, previous_query, total_results,docs_to_load
     query = request.args.get('query')
     page = int(request.args.get('page', 1))
-    print(page)
     start=time.time()
     if query!=previous_query:
         docs_to_load = search(query)
         total_results=len(docs_to_load)
         previous_query=query
-    print(total_results)
     docs = getDocs(docs_to_load,page)
     # ddocs = [json.loads(doc) for doc in docs]
     # for doc in ddocs:

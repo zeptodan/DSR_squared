@@ -2,7 +2,6 @@ import pandas as pd
 import json
 import csv
 import ijson
-from decimal import Decimal
 
 lexi = pd.read_csv("Lexicon_1_Mill.csv", names=["word", "id", "count"], keep_default_na=False, na_values=[])
 lexicon=lexi.set_index("id").to_dict(orient="index")
@@ -15,7 +14,7 @@ cluster={}
 for key,value in  ijson.kvitems(file1, ''):
     if i %100==0:
         print("barrel" + str(i) +"done")
-    if count ==20:
+    if count ==10:
         i+=1
         count=0
         json.dump(cluster,file,separators=[',',':'])
