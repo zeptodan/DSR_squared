@@ -60,6 +60,6 @@ def find_matches(query_words, k):
         for ID, distance in zip(matches_indices, matches_distances):
             word_id = str(ID + 1)
             if word_id in words:
-                matches[words[ID]["word"]] = distance
+                matches[words[word_id]["word"]] = distance
     print(matches)
     return matches
