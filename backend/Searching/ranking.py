@@ -5,5 +5,8 @@ def rank_similar_words(words_and_docs, similarity, lexicon, total_docs,resultant
         idf=math.log(total_docs/doc_count)
         for doc in docs:
             score=((idf*float(doc[1]))*similarity[word])
-            resultant_docs[doc[0]] += score
+            if doc[0] in resultant_docs:
+                resultant_docs[doc[0]] += score
+            else:
+                resultant_docs[doc[0]] = score
 

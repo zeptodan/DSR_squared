@@ -3,6 +3,7 @@ from ranking import rank_similar_words
 from utils import FAISS,lexicon,nlp,words,embeddings
 import numpy as np
 from collections import defaultdict
+import time
 def search(query : str):
     words=[]
     doc = nlp(query)  # renamed from 'words' to 'doc'
@@ -24,10 +25,12 @@ def load_and_rank(wordtoLoad):
         if barrel not in barrels:
             barrels[barrel]=[]
         barrels[barrel].append(newWord)
+    start=time.time()
     for barrel,wordstoLoad in barrels.items():
         if barrel:
             load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
-    tmpDocs=defaultdict(int)
+    print(time.time()-start)
+    tmpDocs={}
     rank_similar_words(words_to_doc,newWords,lexicon, 4040997,tmpDocs)
     return tmpDocs
         
@@ -44,8 +47,6 @@ def find_matches(query_words, k):
     currentEmbedding=[]
     for word in query_words:
         matches[word]=1
-        if word not in lexicon:
-            continue  # Skip this word if it's not found
         wordID = int(lexicon[word]['id'])-1
         word_embedding = embeddings[wordID].reshape(1, -1)
         currentEmbedding.append(word_embedding)
