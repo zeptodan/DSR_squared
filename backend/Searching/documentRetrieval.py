@@ -45,14 +45,21 @@ def find_matches(query_words, k):
     currentEmbedding=[]
     for word in query_words:
         matches[word]=1
-        wordID = lexicon[word]['id']
-        word_embedding = embeddings[int(wordID)-1].reshape(1, -1)
+        if word not in lexicon:
+            continue  # Skip this word if it's not found
+        wordID = int(lexicon[word]['id'])-1
+        word_embedding = embeddings[wordID].reshape(1, -1)
         currentEmbedding.append(word_embedding)
+    
+    if currentEmbedding == []:
+        return matches
     query_embeddings = np.vstack(currentEmbedding)
     whole_distances, whole_indices = FAISS.search(query_embeddings, k)
 
     for matches_distances, matches_indices in zip(whole_distances, whole_indices):
         for ID, distance in zip(matches_indices, matches_distances):
-            matches[words[str(ID)]["word"]] = distance
+            word_id = str(ID + 1)
+            if word_id in words:
+                matches[words[ID]["word"]] = distance
     print(matches)
     return matches
