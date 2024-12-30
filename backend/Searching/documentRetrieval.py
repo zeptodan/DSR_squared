@@ -2,6 +2,7 @@ import json
 from ranking import rank_similar_words
 from utils import FAISS,lexicon,nlp,words,embeddings
 import numpy as np
+from collections import defaultdict
 def search(query : str):
     words=[]
     doc = nlp(query)  # renamed from 'words' to 'doc'
@@ -10,8 +11,7 @@ def search(query : str):
         if wordlemma in lexicon:
             words.append(wordlemma)
     tmpDocs=load_and_rank(words)  
-    resultantDocs=[[key,value] for key,value in tmpDocs.items()]
-    resultantDocs.sort(key=lambda x:x[1],reverse=True)
+    resultantDocs = sorted(tmpDocs.items(), key=lambda x: x[1], reverse=True)
     return resultantDocs
         
 
@@ -25,17 +25,16 @@ def load_and_rank(wordtoLoad):
             barrels[barrel]=[]
         barrels[barrel].append(newWord)
     for barrel,wordstoLoad in barrels.items():
-        print("----------------------------man-------------------------------------")
-        print(barrel)
         if barrel:
             load_words_from_barrel(words_to_doc,barrel,wordstoLoad)
-    tmpDocs={}
+    tmpDocs=defaultdict(int)
     rank_similar_words(words_to_doc,newWords,lexicon, 4040997,tmpDocs)
     return tmpDocs
         
 def load_words_from_barrel(words_to_doc,barrel,wordstoLoad):
     file=open("D:\\DSR_squared\\backend\\barrels\\barrel-" + barrel + ".json")
     data=json.load(file)
+    
     for word in wordstoLoad:
         words_to_doc[word] = data[lexicon[word]["id"]]
     
@@ -61,5 +60,4 @@ def find_matches(query_words, k):
             word_id = str(ID + 1)
             if word_id in words:
                 matches[words[word_id]["word"]] = distance
-    print(matches)
     return matches
