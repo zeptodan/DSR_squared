@@ -26,6 +26,8 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   const [totalPages, setTotalPages] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [searchTime, setSearchTime] = useState(0);
+  const [matches, setMatches] = useState('');
+
   const [error, setError] = useState<string | null>(null);
   const isFetching = useRef(false);
   const _resultsPerPage = 10;
@@ -36,6 +38,7 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
     totalPages,
     totalResults,
     searchTime,
+    matches,
     error,
   });
 
@@ -59,6 +62,8 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
       setTotalPages(data.total_pages);
       setTotalResults(data.total_results);
       setSearchTime(data.search_time);
+      setMatches(data.matches)
+      console.log(data.matches)
     } catch (err) {
       setError('An error occurred while fetching results. Please try again.');
       console.error(err);
@@ -99,14 +104,30 @@ export default function SearchResults({ query, isTwoColumns, sortBy }: SearchRes
   };
 
   const highlightText = (text: string, highlight: string) => {
+    highlight =matches
     if (!highlight.trim()) {
       return text;
     }
-    const regex = new RegExp(`(${highlight})`, 'gi');
+    // Split the highlight string into words and escape them for regex
+    const words = highlight
+      .split(/\s+/)
+      .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); // Escape special characters
+  
+    // Create a regex to match whole words only
+    const regex = new RegExp(`\\b(${words.join('|')})\\b`, 'gi');
+  
     return text.split(regex).map((part, index) =>
-      regex.test(part) ? <span key={index} className="bg-yellow-300">{part}</span> : part
+      regex.test(part) ? (
+        <span key={index} className='text-[--custom-color]' style={{ fontWeight: 'bold', fontStyle: 'normal', color: '#0274e0' }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
     );
   };
+  
+  
 
   if (!query) return null;
 

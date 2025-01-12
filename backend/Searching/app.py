@@ -8,18 +8,21 @@ from documentAddition import docAdd
 previous_query=None
 docs_to_load=None
 total_results=None
+matches=None
+
 app = Flask(__name__)
 CORS(app)
 @app.route('/search', methods=['GET'])
 def search_endpoint():
-    global previous_query, previous_query, total_results,docs_to_load
+    global previous_query, previous_query, total_results,docs_to_load,matches
     query = request.args.get('query')
     page = int(request.args.get('page', 1))
     start=time.time()
     if query!=previous_query:
-        docs_to_load = search(query)
+        docs_to_load,matches = search(query)
         total_results=len(docs_to_load)
         previous_query=query
+        
     docs = getDocs(docs_to_load,page)
     # ddocs = [json.loads(doc) for doc in docs]
     # for doc in ddocs:
@@ -32,7 +35,6 @@ def search_endpoint():
     for doc in docs:
         doc_data = json.loads(doc)
         results.append({
-            'id': doc_data['id'],
             'title': doc_data['title'],
             'description': doc_data['abstract'],
             'authors': [authors['name'] for authors in doc_data["authors"]],
@@ -48,17 +50,16 @@ def search_endpoint():
         'results': results,
         'total_pages': total_pages,
         'total_results': total_results,
-        'search_time': search_time  # You can add actual search time if needed
+        'search_time': search_time,
+        'matches': matches
     }
     
     return jsonify(response)
 @app.route('/add-paper', methods=['POST'])
 def add_paper():
-    print("--------------------------------A FUCKKKKKKKKKKK is recieved_----------------------------------------------------")
 
     data=request.json
     docAdd(data)
-    print(data)
     return jsonify({'message':'Paper added Successfully'}),200
 
 def getDocs(docs_to_load,page):
@@ -80,7 +81,6 @@ def getDocs(docs_to_load,page):
                 elif doc[-1] == "}":
                     stack.pop()
             docs.append(doc)
-            
     return docs
 
 if __name__ == '__main__':

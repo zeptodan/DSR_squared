@@ -37,7 +37,7 @@ export default function Home() {
   }, [])
 
    const handleSearch = (newQuery: string) => {
-    setQuery(newQuery)
+    setQuery(newQuery.trim())
     setSearchKey(prevKey => prevKey + 1) // Force a new search
     if (mainRef.current) {
       mainRef.current.scrollIntoView({ behavior: 'smooth' })

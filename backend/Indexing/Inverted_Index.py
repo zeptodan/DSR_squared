@@ -2,14 +2,14 @@ import ijson
 import json
 #function to give score to words in the document based on its importance
 def calculate_weight(value,length):
-    temp=round((value[0]+value[1]+value[2])/length,8)
+    temp=round((10*value[0]+2*value[2])/length,8)
     return str(temp)
     
 offsets=open("offsets.csv","r")
 offsetlist=offsets.readlines()
 offsetlist=[int(offset) for offset in offsetlist]
 file = open("Forward_index_third.json","r")
-writefile=open("Inverted_index.json","w")
+writefile=open("Inverted_index_copy.json","w")
 documents=ijson.items(file,"item")
 inverted_index={}
 i=0

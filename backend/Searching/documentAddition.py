@@ -1,17 +1,25 @@
-import json
 import os
 from utils import nlp,lexicon
+import pickle
+import random
+import json
 def calculate_weight(value,length):
-    temp=round((value[0]+value[1]+value[2])/length,8)
+    temp=round((10*value[0]+2*value[2])/length,8)
     return str(temp)
     
 def docAdd(doc):
-    file = open("nice.json","r+")
+    file = open("TheCleanData3.0.json","r+")
     file.seek(0, os.SEEK_END)  # Move to the end of the file
     file.seek(file.tell() - 1, os.SEEK_SET)  # Move back 1 character to overwrite the closing bracket "]"
     file.write(",")
     offset=file.tell()
-    json.dump(doc,file,separators=[",",":"])
+    authors=doc["authors"]
+    authorsdic=[]
+    for author in authors:
+        authorsdic.append({"name": author})
+    doc["id"] = random.randint(-10000000000,0)
+    doc["authors"]=authorsdic
+    json.dump(doc,file)
     file.write("]")
     count=0
     titlecount=doc["title"].count(" ") +1
@@ -49,17 +57,17 @@ def docAdd(doc):
             elif wordlemma in lexicon:
                 document_index[wordlemma][1]+=1
     document_index["L"]=count
-    document_index["cite"]=int(doc["citations"])
+    document_index["cite"]=int(doc["n_citation"])
     
     
     
     for key,value in document_index.items():
         if key !="L" and key != "cite":
-            file=open("barrels/barrel-" + lexicon[key]["barrel"] + ".json","r")
-            invertedbarrel=json.load(file)
+            file=open("backend/pickled_barrels/barrel-" + lexicon[key]["barrel"] + ".pkl","rb")
+            invertedbarrel=pickle.load(file)
             invertedbarrel[lexicon[key]["id"]].append([offset,calculate_weight(value,document_index["L"]),document_index["cite"]])
             file.close()
-            file=open("barrels/barrel-" + lexicon[key]["barrel"] + ".json","w")
-            json.dump(invertedbarrel,file,separators=[",",":"])
+            file=open("backend/pickled_barrels/barrel-" + lexicon[key]["barrel"] + ".pkl","wb")
+            pickle.dump(invertedbarrel,file)
             file.close()
     
