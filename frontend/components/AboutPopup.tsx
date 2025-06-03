@@ -71,7 +71,7 @@ export default function AboutPopup({ onClose }: AboutPopupProps) {
             <Button
               variant="outline"
               className="bg-white/10 hover:bg-blue-500 hover:text-white transition-colors border-white/30 rounded-full"
-              onClick={() => window.open("https://linkedin.com", "_blank")}
+              onClick={() => window.open("https://www.linkedin.com/in/danish-munib/", "_blank")}
             >
               <Linkedin className="h-4 w-4 mr-2" />
               LinkedIn
@@ -80,7 +80,7 @@ export default function AboutPopup({ onClose }: AboutPopupProps) {
             <Button
               variant="outline"
               className="bg-white/10 hover:bg-blue-500 hover:text-white transition-colors border-white/30 rounded-full"
-              onClick={() => window.open("https://github.com", "_blank")}
+              onClick={() => window.open("https://github.com/zeptodan/DSR_squared", "_blank")}
             >
               <Github className="h-4 w-4 mr-2" />
               GitHub
@@ -89,7 +89,7 @@ export default function AboutPopup({ onClose }: AboutPopupProps) {
             <Button
               variant="outline"
               className="bg-white/10 hover:bg-blue-500 hover:text-white transition-colors border-white/30 rounded-full"
-              onClick={() => window.open("mailto:contact@dsr2.com")}
+              onClick={() => window.open("mailto:danishmunibcontact@gmail.com")}
             >
               <Mail className="h-4 w-4 mr-2" />
               Email
