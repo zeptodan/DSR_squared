@@ -49,3 +49,8 @@ Forward_index_test.json
 Inverted_index_third.json
 Lexicon_1_Reordered.csv
 Lexicon_1_Barrels.csv
+Embeddings_1.npy
+Forward_Index_1.index
+
+Indexing/LexiconFull.csv
+frontend/frontend.zip
