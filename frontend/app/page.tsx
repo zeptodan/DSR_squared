@@ -48,7 +48,7 @@ export default function Home() {
     "bg-white/20 backdrop-blur-md hover:bg-blue-500 hover:text-white transition-colors rounded-full border-2 border-white/50"
 
   return (
-    <main ref={mainRef} className="min-h-screen bg-gradient-to-br from-slate-800 to-black text-white">
+    <main ref={mainRef} className="min-h-screen smooth-gradient bg-gradient-to-br from-slate-800 to-black text-white">
       <div className={`transition-all duration-500 ease-in-out ${query ? "pt-8" : "pt-[30vh]"}`}>
         {query && isScrolled && (
           <div className="sticky top-4 z-10 w-[calc(100%-2rem)] sm:w-[calc(100%-4rem)] md:w-[calc(100%-8rem)] lg:w-[90%] xl:w-[95%] max-w-[1600px] mx-auto">

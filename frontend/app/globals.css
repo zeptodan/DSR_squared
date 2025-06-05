@@ -72,3 +72,16 @@ body {
   @apply custom-scrollbar;
 }
 
+.smooth-gradient {
+  position: relative;
+}
+
+.smooth-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  backdrop-filter: blur(200px);
+  -webkit-backdrop-filter: blur(200px);
+  z-index: -1;
+}

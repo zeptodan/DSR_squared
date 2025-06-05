@@ -54,3 +54,9 @@ Forward_Index_1.index
 
 Indexing/LexiconFull.csv
 frontend/frontend.zip
+Assets/Dataset_Papers.json
+Assets/FAISS_Index_1.index
+Assets/Inverted_index_copy.json
+Embeddings_1.npy
+FAISS_Index_1.index
+Assets/Embeddings.npy
