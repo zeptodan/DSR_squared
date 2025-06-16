@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)]() [![Python](https://img.shields.io/badge/Python-3.9+-green.svg)]() [![Flask](https://img.shields.io/badge/Flask-3.1+-black.svg)]() [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)]
 # DSR²
 
-> A modern, fast scientific and academic paper search engine enhanced with ML.
+A modern, fast scientific and academic paper search engine enhanced with ML.
 
 ## Features
 
@@ -76,7 +76,7 @@ DSR²/
 
 ## Data
 
-> The datasets and indices can all be downloaded [here](https://drive.google.com/drive/folders/1yDvounEtpnOgNOEnsvgFJX2m38jALtGl?usp=sharing)
+The datasets and indices can all be downloaded [here](https://drive.google.com/drive/folders/1yDvounEtpnOgNOEnsvgFJX2m38jALtGl?usp=sharing)
 
 ## License
 
