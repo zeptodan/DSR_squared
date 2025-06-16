@@ -82,11 +82,11 @@ DSR²/
 
 ## Data
 
-The datasets and indices can all be downloaded [here](https://drive.google.com/drive/folders/1yDvounEtpnOgNOEnsvgFJX2m38jALtGl?usp=sharing)
+The datasets and indices can all be downloaded [here](https://drive.google.com/drive/folders/1yDvounEtpnOgNOEnsvgFJX2m38jALtGl?usp=sharing).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://claude.ai/chat/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/zeptodan/DSR_squared/blob/2571b0b474e4dbfddbd0f487af55f5fbfb5f03b8/LICENSE) file for details.
 
 ## Acknowledgments
 
