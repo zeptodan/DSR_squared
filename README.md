@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/zeptodan/DSR_squared/main/Assets/Banner.png" width="100%" height = auto>
 </p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)]() [![Python](https://img.shields.io/badge/Python-3.9+-green.svg)]() [![Flask](https://img.shields.io/badge/Flask-3.1+-black.svg)]() [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)]
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)]() [![Python](https://img.shields.io/badge/Python-3.9+-green.svg)]() [![Flask](https://img.shields.io/badge/Flask-3.1+-black.svg)]() [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)]()
 # DSR²
 
 A modern, fast scientific and academic paper search engine enhanced with ML.
