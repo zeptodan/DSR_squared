@@ -43,6 +43,12 @@ A modern, fast scientific and academic paper search engine enhanced with ML.
 - **Search Speed**: < 1s average response time
 - **Corpus**: 1 million+ scientific and academic papers
 
+## Query Processing
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/zeptodan/DSR_squared/main/Assets/DSR²-4.jpg" width="100%" height = auto>
+</p>
+
 ## 📋 Project Structure
 
 ```
