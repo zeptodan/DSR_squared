@@ -16,9 +16,12 @@ A modern, fast scientific and academic paper search engine enhanced with ML.
 - **Mobile Ready**: Fully responsive design for all devices
 
 
+
 <p align="center"> 
   <img src="https://raw.githubusercontent.com/zeptodan/DSR_squared/main/Assets/DSR_Demo_GIF.gif" width="100%" height = "auto">
 </p>
+
+
 
 ## Tech Stack
 
