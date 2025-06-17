@@ -3,15 +3,16 @@
 </p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)]() [![Python](https://img.shields.io/badge/Python-3.9+-green.svg)]() [![Flask](https://img.shields.io/badge/Flask-3.1+-black.svg)]() [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)]()
-# DSR²
+# **DSR²**
 
-A modern, fast scientific and academic paper search engine enhanced with ML.
+A modern and fast scientific paper search engine built from scratch with Python.
 
 ## Features
 
 - **Lightning Fast**: Sub-second search results with optimized indexing
 - **Intelligent Ranking**: Modern relevance scoring algorithms (TF-IDF)
-- **Synonym search**: Fast query expansion with synonyms, powered by machine learning 
+- **Synonym search**: Fast query expansion with synonyms, powered by machine learning
+- **Additional Documents**: Allow the user to upload documents and update indexes near-instantly
 - **Modern UI**: Clean, responsive interface built with React
 - **Mobile Ready**: Fully responsive design for all devices
 
@@ -85,9 +86,11 @@ DSR²/
 
 The datasets and indices can all be downloaded [here](https://drive.google.com/drive/folders/1yDvounEtpnOgNOEnsvgFJX2m38jALtGl?usp=sharing).
 
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/zeptodan/DSR_squared/blob/2571b0b474e4dbfddbd0f487af55f5fbfb5f03b8/LICENSE) file for details.
+
 
 ## Acknowledgments
 
@@ -100,8 +103,9 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 ---
 
- <p align="center"> Made with ❤️ by 
+ <p align="center"> Made with ❤️ by </p>
+ <p align="center">
   <a href="https://github.com/dmunish">Danish Munib</a>, 
-  <a href="https://github.com/GHAURIEE">Nouman Ghauri</a>, 
+  <a href="https://github.com/GHAURIEE">Nouman Ghauri</a> and
   <a href="https://github.com/zeptodan">Muhammad Anas</a>
 </p>
