@@ -16,10 +16,8 @@ A modern, fast scientific and academic paper search engine enhanced with ML.
 - **Mobile Ready**: Fully responsive design for all devices
 
 
-
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/zeptodan/DSR_squared/main/Assets/Project_Demo_Vid.webp" width="100%" height = auto>
+<p align="center"> 
+  <img src="https://raw.githubusercontent.com/zeptodan/DSR_squared/main/Assets/DSR_Demo_GIF.gif" width="100%" height = "auto">
 </p>
 
 ## Tech Stack
@@ -28,7 +26,7 @@ A modern, fast scientific and academic paper search engine enhanced with ML.
 <p align="center"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS" width="40" height="40"/>
 <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="40" height="40"/>
  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flask/flask-original.svg" alt="Flask" width="40" height="40"/>
- <img src="https://cdn-lfs.hf.co/repos/96/a2/96a2c8468c1546e660ac2609e49404b8588fcf5a748761fa72c154b2836b4c83/942cad1ccda905ac5a659dfd2d78b344fccfb84a8a3ac3721e08f488205638a0?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27hf-logo.svg%3B+filename%3D%22hf-logo.svg%22%3B&response-content-type=image%2Fsvg%2Bxml&Expires=1750096735&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc1MDA5NjczNX19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy5oZi5jby9yZXBvcy85Ni9hMi85NmEyYzg0NjhjMTU0NmU2NjBhYzI2MDllNDk0MDRiODU4OGZjZjVhNzQ4NzYxZmE3MmMxNTRiMjgzNmI0YzgzLzk0MmNhZDFjY2RhOTA1YWM1YTY1OWRmZDJkNzhiMzQ0ZmNjZmI4NGE4YTNhYzM3MjFlMDhmNDg4MjA1NjM4YTA%7EcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj0qJnJlc3BvbnNlLWNvbnRlbnQtdHlwZT0qIn1dfQ__&Signature=MA7YFwwBAjU8KGNGIHwQmFfptFf03AIm%7EawmagRtJj2jlg%7Est7bbMKAu-FbGmTElmssPNwg7kXaStogER%7EYxh%7E1mmW0TpdEUhwdX9WiHlWo6NXjmtsrUpx1QLvYi7M-zYK67UkPRVK0lfXcvuKoGbjteQ3Qc1YtpmYTv52jOIkeKgEbYELjS8nvJ1OMFUYGAmIJCMgw2uyLJClX8Twd0g-5L87i-HbfNdFtJvzfuwkfov7iH87EPaq0AfF2GXRgdvrnK4MVr3OVjVDXVlY0hKNYF%7EQUXBzYY1D4GUvZ-xSHXURC5RdOrhrh5KnQ6A0B8utqPcuEssaenC4tO7AwDdg__&Key-Pair-Id=K3RPWS32NSSJCE" alt = "Sentence Transformers" height="50"/>
+  <img src="https://cdn.brandfetch.io/idGqKHD5xE/theme/dark/symbol.svg?c=1dxbfHSJFAPEGdCLU4o5B" alt = "Hugging Face" height="40"/>
  </p> 
 <p align="center"> 
 
